@@ -135,7 +135,7 @@ axios({
         method: "GET",
         headers: {
         "Content-Type": "application/json",
-        "x-api-key": xKey, //x-api-key parameter goes here
+        "x-api-key": xKey, //x-api-key(link below) parameter goes here
       }
       })
         .then((res) => {
