@@ -1,0 +1,60 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@200;300;400;500&display=swap");
+
+html {
+  scroll-behavior: smooth;
+  transition: all 0.3s ease;
+}
+a {
+  text-decoration: none;
+  color: #fff;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+}
+
+p {
+  font-family: "Inter", sans-serif;
+  font-weight: 300;
+}
+.table
+{
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  border: 3px solid #00203f;
+  border-color: #00203f;
+}
+
+
+nav {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+input,
+select {
+  font-family: "Noto Sans Mono", monospace;
+}
+.btn {
+  font-family: "Inter", sans-serif;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  border-radius: 10px;
+}
+
+.nft-card {
+  border-radius: 7px;
+  color: #adefd1;
+  background-color: #00203f;
+}
+.nft-card .card-body .col {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+}

@@ -1,0 +1,88 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@200;300;400;500&display=swap");
+* {
+  font-family: 'Inter',sans-serif;
+}
+.grd-back
+{
+  background: #8E2DE2;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #4A00E0, #8E2DE2);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #4A00E0, #8E2DE2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  min-height: 100vh;
+
+}
+
+.button-24 {
+  background: #FF4742;
+  border: 1px solid #FF4742;
+  border-radius: 50px;
+  box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 16px;
+  min-height: 40px;
+  outline: 0;
+  padding: 12px 24px;
+  text-align: center;
+  text-rendering: geometricprecision;
+  text-transform: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  transition: all 0.3s;
+}
+
+.button-24:hover,
+.button-24:active {
+  background-color: initial;
+  background-position: 0 0;
+  color: #FF4742;
+}
+
+.button-24:active {
+  opacity: .5;
+}
+
+.nft-card
+{
+  border-radius: 15px;
+  border: 1px solid white;
+}
+
+.card-image
+{
+  width: 100%;
+  height: 240px;
+  margin: 0 auto;
+  margin-bottom: 10px;
+  border-radius: 15px;
+}
+.nft-card a
+{
+  text-decoration: none;
+  color: #FFFFFF;
+}
+
+.attr-crd
+{
+  border: 1px solid white;
+  display: inline-block;
+  padding: 10px;
+  border-radius: 5px;
+}
+.attr-crd h6
+{
+  font-size: 0.8em;
+  opacity: 0.7;
+}
+.attr-crd h5
+{
+  font-size: 0.9em;
+  margin-bottom: -1px;
+
+}
