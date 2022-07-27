@@ -179,4 +179,6 @@ So that's pretty much what we need. Once the request has been successfully submi
 
 Congratulations, You have successfully created an NFTs. You can clone and try out this code on your local system, or just write your own from scratch using our step by step approach.
 
-`Note: we have added a few minor css & styling files to our project, all the styling files are present in the resources folder.`
+`Note: X-API-KEY is required to run this project which you can obtain your own on the shyft website(link below) by simply signing up with your email`
+
+You can get your own API Key [here](https://shyft.to/get-api-key)

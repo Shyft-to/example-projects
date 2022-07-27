@@ -226,4 +226,8 @@ So, that is pretty much how you can use our `read_all` API. We have also loaded 
 the data related to all the NFTs in a separate page but we will learn more tutorial related 
 to that in the next sample project.
 
-`Note: we have added a few minor css & styling files to our project, all the styling files are present in the resources folder`
+`Note: X-API-KEY is required to run this project which you can obtain your own on the shyft website(link below) by simply signing up with your email`
+
+You can get your own API Key [here](https://shyft.to/get-api-key)
+
+
