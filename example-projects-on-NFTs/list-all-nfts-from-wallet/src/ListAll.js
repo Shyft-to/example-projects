@@ -52,7 +52,7 @@ const ListAll = () => {
     e.preventDefault();
     //const val = ReadAllNFts.callNft(xKey,wallID,network,updAuth); // This is the code which is not working
     
-    let nftUrl = `https://api.shyft.to/sol/v1/nft/read_all?network=${network}&address=${wallID}&update_authority=${wallID}`;
+    let nftUrl = `https://api.shyft.to/sol/v1/nft/read_all?network=${network}&address=${wallID}`;
     axios({
       // Endpoint to send files
       url: nftUrl,
