@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# List all Tokens from your Wallet
 
-In this tutorial we will build a simple app which whill list all the fungible tokens tokens in your wallet using our very own SHYFT APIs.
+In this tutorial we will build a simple app which will list all the fungible tokens tokens in your wallet using our very own SHYFT APIs.
 Once done, you will be able view a list of Fungible Tokens from your wallet. 
 
 Read SHYFT Documentation [here](https://docs.shyft.to/).
@@ -12,7 +12,7 @@ To get started, we will need a few things. We will need the Phantom wallet brows
 * [Chrome/Brave](https://chrome.google.com/webstore/detail/phantom/bfnaelmomeimhlpmgjnjophhpkkoljpa).
 * [Firefox](https://addons.mozilla.org/en-US/firefox/addon/phantom-app/).
 
-Once, Set up you Phantom wallet account. On screen tips are available which will guide you to set up and get started. You can also find a detailed guide related to this [here](https://news.coincu.com/2433-the-easiest-guide-to-using-phantom-wallet-on-solana/).
+Once done, set up you Phantom wallet account. On screen tips are available which will guide you to set up and get started. You can also find a detailed guide related to this [here](https://news.coincu.com/2433-the-easiest-guide-to-using-phantom-wallet-on-solana/).
 
 We will use React to develop this project but you can choose any language of your choice. As we are using react we will need Node.js installed on our computer. You can download node.js from [here](https://nodejs.org/en/download/).
 
@@ -26,7 +26,7 @@ npx create-react-app list-all-tokens-from-wallet
 
 This will create a boilerplate template for you new react project. We have used vscode as our code editor for this project, but you can use any code editor of your choice. Once the above command has completed its execution, we will open up that project folder using vscode and it should look like this.
 
-![OpenWithVSCode](./src/resources/screens/initial-editor.png)
+![OpenWithVSCode](./src/resources/screens/Initial-editor.png)
 
 ## Building the application
 
@@ -34,9 +34,9 @@ We have divided the project into two parts.
 1) We will create a module for fetching and displaying a list of all the tokens in your wallet.
 2) We will create a module for fetching and displaying all the details related of one particular token in this project.
 
-So, let's get start building.
+So, let's start building.
 
-## Displaying a list of all modules in your wallet
+## Displaying a list of all tokens in your wallet
 
 ### Connecting to Phantom wallet.
 
@@ -83,7 +83,7 @@ import { PhantomWalletAdapter } from '@solana/wallet-adapter-phantom';
 ```
 and the function for connecting to phantom
 
-```[javascript]
+```javascript
 const solanaConnect = async () => {
     const { solana } = window;
     if (!solana) {
@@ -458,6 +458,6 @@ Congratulations, you have just completed creating a DAPP in which you can get al
 
 Feel free to clone our code and contribute to our community. 
 
-If ypu liked this, you can learn more about SHYFT APIs in our [API Documentation](https://docs.shyft.to/).
+If you liked this, you can learn more about SHYFT APIs in our [API Documentation](https://docs.shyft.to/).
 
 You can view a more refined version of this project [here](https://solana-fungible-tokens-project.vercel.app/).
