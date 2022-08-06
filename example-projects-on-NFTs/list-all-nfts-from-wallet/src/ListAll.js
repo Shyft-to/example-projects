@@ -79,7 +79,7 @@ const ListAll = () => {
     <div className="grd-back">
       
       <div className="container-lg">
-        <div className="py-4 text-center text-light">
+        <div className="py-4 text-center">
           <h1>List All Your NFTs</h1>
           <p>
             This is a sample project which will list all your NFTs associated
@@ -93,7 +93,7 @@ const ListAll = () => {
           <div className="card-body text-center">
             <h2 className="card-title p-2">Connect Your Wallet</h2>
             <p className="card-text p-1">You need to connect your wallet to deploy and interact with your contracts.</p>
-            <button class="btn btn-light rounded-pill mt-5 px-3" onClick={solanaConnect}>Connect Phantom Wallet</button>
+            <button className="btn btn-light rounded-pill mt-5 px-3" onClick={solanaConnect}>Connect Phantom Wallet</button>
             {/* <select className="form-select" onChange={(e) => {
               console.log(e.target.value);
               (e.target.value === 'mtmsk') ? mtmskConnect() : solanaConnect();
@@ -151,10 +151,10 @@ const ListAll = () => {
                 <div className="col-xs-12 col-sm-3 p-3" key={item.mint}>
                   <div className="card nft-card bg-dark">
                     <div className="card-body">
-                      <a href={`/get-details?token_address=${item.mint}&apiKey=${xKey}`} target="_blank" rel="noreferrer">
-                        <img className="card-image" src={item.image_uri} alt="img" />
+                      <a href={`/get-details?token_address=${item.mint}&network=${network}`} target="_blank" rel="noreferrer">
+                        <img className="card-image img-fluid" src={item.image_uri} alt="img" />
                       </a>
-                      <a href={`/get-details?token_address=${item.mint}&apiKey=${xKey}`} target="_blank" rel="noreferrer">
+                      <a href={`/get-details?token_address=${item.mint}&network=${network}`} target="_blank" rel="noreferrer">
                         <h5>{item.name}</h5>
                       </a>
                       

@@ -16,6 +16,7 @@ const GetDetails = () => {
 //   const [tokenParams, setTokenparams] = useState(
 //     window.location.search.substring(1)
 //   );
+const xKey = "";//enter your x api key here
   let tokenParams = window.location.search.substring(1);
 
   let getParams = tokenParams.split("&");
@@ -23,13 +24,13 @@ const GetDetails = () => {
   let apiParams = getParams[1].split("=");
   console.log(apiParams[1]);
   let nftUrl =
-    "https://api.shyft.to/sol/v1/nft/read?network=devnet&" + getParams[0]; //change network to testnet or main net beta if using them
+    "https://api.shyft.to/sol/v1/nft/read?" + window.location.search.substring(1); //change network to testnet or main net beta if using them
   useEffect(() => {
     fetch(nftUrl, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "x-api-key": apiParams[1],
+        "x-api-key": xKey,
       },
       //   body: JSON.stringify({ network: "devnet", token_address: "" }),
     })
@@ -78,7 +79,7 @@ const GetDetails = () => {
             }}
           />
         </div>
-        <h2 className="pb-2 text-center text-light">{name}</h2>
+        <h2 className="pb-2 text-center text-dark">{name}</h2>
         <div className="table-container py-4">
           <table className="table table-striped table-dark">
             <tbody>
