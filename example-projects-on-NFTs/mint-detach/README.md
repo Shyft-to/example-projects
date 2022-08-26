@@ -271,7 +271,7 @@ await confirmTransactionFromBackend('devnet','THE_ENCODED_TRANSACTION','THE_PRIV
 Once successfully executed, this should sign and approve the transaction, and the intended operation, which in this case is the NFT minting operation,will be complete.
 
 
-That's pretty much everything about this sample project tutorial. If you enjoyed it, and want to try out our code, you can [clone the code](https://) from our GitHub repository. 
+That's pretty much everything about this sample project tutorial. If you enjoyed it, and want to try out our code, you can [clone the code](https://github.com/Shyft-to/example-projects/tree/main/example-projects-on-NFTs/mint-detach) from our GitHub repository. 
 
 
 
