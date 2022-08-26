@@ -106,9 +106,9 @@ function App() {
               <input type="text" className="form-control" placeholder="Enter Receiver Wallet Address" onChange={(e) => setReceiver(e.target.value)}/>
             </div>
             <div className="mb-3 mt-3">
-              <label className="form-label">Do you want to transfer the update authority of this NFT to the receiver:</label>
-              <span className='ms-5'><input type="radio" value="true" name="transAuth" onChange={(e) => setAuth(!auth)} /> Yes do It.</span>
-              <span className='ms-5'><input type="radio" value="true" name="transAuth" onChange={(e) => setAuth(!auth)}/> No Don't give authority.</span>
+              <label className="form-label">Do you want to transfer the update authority of this NFT to the receiver(Ignore for not granting):</label>
+              <span className='ms-5'><input type="radio" value="true" name="transAuth" onChange={(e) => setAuth(!auth)} /> Yes grant update authority.</span>
+              {/* <span className='ms-5'><input type="radio" value="true" name="transAuth" onChange={(e) => setAuth(!auth)}/> No Don't give authority.</span> */}
             </div>
             
             
