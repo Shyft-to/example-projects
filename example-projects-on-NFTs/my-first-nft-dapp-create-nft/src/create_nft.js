@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 // import './resources/css/custom2.css';
+import { signAndConfirmTransactionFe } from "./utilityfunc";
 
 import disPic from './resources/images/upload-file.jpg';
 const xApiKey = ""; //Enter Your x-api-key here
@@ -8,16 +9,18 @@ const Create = () => {
 	const [file, setfile] = useState();
 	const [displayPic, setDisplayPic] = useState(disPic);
 	const [network, setnetwork] = useState("devnet");
-	const [privKey, setprivKey] = useState();
+	// const [privKey, setprivKey] = useState();
+	const [publicKey, setPublicKey] = useState('');
 	const [name, setName] = useState();
 	const [symbol, setSymbol] = useState();
 	const [desc, setDesc] = useState();
 	const [attr, setAttr] = useState(JSON.stringify([{"trait_type": "edification","value": "100"}]));
 	const [extUrl, setExtUrl] = useState();
-	const [maxSup, setMaxSup] = useState(1);
+	const [maxSup, setMaxSup] = useState(0);
 	const [roy, setRoy] = useState(99);
 
 	const [minted,setMinted] = useState();
+	const [saveMinted,setSaveMinted] = useState();
 	const [errorRoy, setErrorRoy] = useState();
 
 	const [status, setStatus] = useState("Awaiting Upload");
@@ -25,12 +28,22 @@ const Create = () => {
 
 	const [connStatus, setConnStatus] = useState(true);
 
+	const callback = (signature,result) => {
+		console.log("Signature ",signature);
+		console.log("result ",result);
+		if(signature.err === null)
+		{
+			setMinted(saveMinted);
+			setStatus("success: Successfully Signed and Minted.");
+		}
+	  }
+
 	const mintNow = (e) => {
 		e.preventDefault();
 		setStatus("Loading");
 		let formData = new FormData();
 		formData.append("network", network);
-		formData.append("private_key", privKey);
+		formData.append("wallet", publicKey);
 		formData.append("name", name);
 		formData.append("symbol", symbol);
 		formData.append("description", desc);
@@ -42,7 +55,7 @@ const Create = () => {
 
 		axios({
 			// Endpoint to send files
-			url: "https://api.shyft.to/sol/v1/nft/create",
+			url: "https://api.shyft.to/sol/v1/nft/create_detach",
 			method: "POST",
 			headers: {
 				"Content-Type": "multipart/form-data",
@@ -55,11 +68,18 @@ const Create = () => {
 			data: formData,
 		})
 			// Handle the response from backend here
-			.then((res) => {
+			.then(async (res) => {
 				console.log(res);
-				setStatus("success: " + res.data.success);
-				setDispResp(res.data);
-				setMinted(res.data.result.mint);
+				if(res.data.success === true)
+				{
+					setStatus("success: Transaction Created. Signing Transactions. Please Wait.");
+					const transaction = res.data.result.encoded_transaction;
+					setSaveMinted(res.data.result.mint);
+					const ret_result = await signAndConfirmTransactionFe(network,transaction,callback);
+            		console.log(ret_result);
+					setDispResp(res.data);
+					
+				}
 			})
 
 			// Catch errors if any
@@ -121,7 +141,7 @@ const Create = () => {
 										<small>Solana blockchain environment (testnet/devnet/mainnet-beta)</small>
 
 									</td>
-									<td className="px-5">
+									<td className="px-5 pt-4">
 										<select
 											name="network"
 											className="form-select"
@@ -136,18 +156,18 @@ const Create = () => {
 								</tr>
 								<tr>
 									<td className="py-4 ps-2 w-50 text-start">
-										Private Key<br />
-										<small>Your wallet's private key (string)</small>
+										Public Key<br />
+										<small>Your wallet's public key (string)</small>
 									</td>
-									<td className="px-5">
-										<input type="text" className="form-control" placeholder="Enter Your Wallet's Private Key" value={privKey} onChange={(e) => setprivKey(e.target.value)} required />
+									<td className="px-5 pt-4">
+										<input type="text" className="form-control" placeholder="Enter Your Wallet's Public Key" value={publicKey} onChange={(e) => setPublicKey(e.target.value)} required />
 									</td>
 								</tr>
 								<tr>
 									<td className="py-4 ps-2 text-start">Name<br />
 										<small>Your NFT Name (string)</small>
 									</td>
-									<td className="px-5">
+									<td className="px-5 pt-4">
 										<input type="text" className="form-control" placeholder="Enter NFT Name" value={name} onChange={(e) => setName(e.target.value)} required />
 									</td>
 								</tr>
@@ -156,7 +176,7 @@ const Create = () => {
 										Symbol<br />
 										<small>Your NFT Symbol (string)</small>
 									</td>
-									<td className="px-5">
+									<td className="px-5 pt-4">
 										<input type="text" className="form-control" placeholder="symbol" value={symbol} onChange={(e) => setSymbol(e.target.value)} required />
 									</td>
 								</tr>
@@ -183,7 +203,7 @@ const Create = () => {
 										External Url <br />
 										<small>Any url to associate with the NFT</small>
 									</td>
-									<td className="px-5">
+									<td className="px-5 pt-4">
 										<input type="text" className="form-control" placeholder="Enter Url if Any" value={extUrl} onChange={(e) => setExtUrl(e.target.value)} />
 									</td>
 								</tr>
@@ -194,6 +214,9 @@ const Create = () => {
 							</div>
 						</div>
 					</form>
+					<div className="text-center">
+						This creates one of kind NFTs by setting the <code>max_supply</code> parameter to 0. But you can update it needed, it should be between <i>0-100</i>.
+					</div>
 				</div>)}
 
 				<div className="py-5">
