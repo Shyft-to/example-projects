@@ -107,23 +107,27 @@ const ListAll = () => {
             <table className="table w-75 mx-auto text-center">
               <thead>
                 <tr>
-                  <td className="w-50 border-2">Token Address</td>
-                  <td className="w-50 border-2">Balance</td>
+                  <td className="w-25 border-2">Token Image</td>
+                  <td className="w-50 border-2">Token Details</td>
+                  <td className="w-25 border-2">Balance</td>
                 </tr>
               </thead>
               <tbody>
                 {data &&
                   data.map((tokn) => (
                     <tr key={tokn.address}>
+                      <td className="w-25 border-2">
+                        <img src={tokn.info.image} className="img-fluid w-75 mx-auto" alt="" />
+                      </td>
                       <td className="w-50 border-2">
                         <Link
                           to={`/view-details?token_address=${tokn.address}&network=${netWrk}`}
                           target="_blank"
-                        >
+                        ><h4>{tokn.info.name}</h4>
                           {tokn.address}
                         </Link>
                       </td>
-                      <td className="w-50 border-2">{tokn.balance}</td>
+                      <td className="w-25 border-2">{tokn.balance} {tokn.info.symbol}</td>
                     </tr>
                   ))}
               </tbody>
