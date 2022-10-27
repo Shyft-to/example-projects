@@ -1,40 +1,54 @@
-import { ReactSession } from "react-client-session";
 import { useContext } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import Red from "./resources/images/red-heart.png";
 import Blue from "./resources/images/blue-heart.jpeg";
 import Green from "./resources/images/green-heart.jpeg";
 import { WalletContext } from "./WalletContext";
 import axios from "axios";
 import { signAndConfirm, signAndConfirmTransaction } from "./utility/common";
-import {ReactSession} from 'react-client-session';
+import { ReactSession } from "react-client-session";
+// import {fs} from 'fs';
+// import path from 'path';
+// import { BinaryFile } from 'react-native-binary-file';
 
 const Membership = () => {
   const { walletId } = useContext(WalletContext);
+  // reader.readAsText(Red);
+  // console.log(new File(["red-heart"],Green));
   const navigate = useNavigate();
+  // console.log(URL.createObjectURL(Red))
   const callback = (signature, result) => {
     console.log("Signature ", signature);
     console.log("result ", result);
-    
   };
   const callback2 = (signature, result) => {
     console.log("Signature ", signature);
     console.log("result ", result);
+    console.log("In callback 2");
     ReactSession.set("subs_name", "");
-    ReactSession.set("subs_addr", "");
+    ReactSession.set("subs_addr", null);
     ReactSession.set("subs_expr", "");
     ReactSession.set("subs_discount", "");
     ReactSession.set("subs_actv", false);
-    navigate('/login');
+    navigate("/login");
   };
 
   const renewMembership = (value) => {
     // console.log(new Date(new Date().setMonth(new Date().getMonth() + 3)).toISOString().slice(0, 10));
     const memToken = ReactSession.get("subs_addr") ?? null;
+    console.log(memToken);
+    
+    // var green_file;
 
-    //deduct api call here
-    const xKey = process.env.REACT_APP_API_KEY;
-    const endPoint = process.env.REACT_APP_URL_EP;
+    // const readFiles = async () => {
+    //   const readFileGreen = await BinaryFile.open('path-to-file');
+    // } 
+    var formData = new FormData();
+    if (memToken) {
+
+      //deduct api call here
+    const xKey2 = process.env.REACT_APP_API_KEY;
+    const endPoint2 = process.env.REACT_APP_URL_EP;
     var amount_to_be_deducted = 0;
     if (value === "green") {
       amount_to_be_deducted = 0.5;
@@ -45,13 +59,13 @@ const Membership = () => {
     }
     const publicKey = process.env.REACT_APP_PUB_KEY; //marketplace owner wallet
 
-    let nftUrl = `${endPoint}wallet/send_sol_detach`;
+    let nftUrl2 = `${endPoint2}wallet/send_sol_detach`;
     axios({
       // Endpoint to get NFTs
-      url: nftUrl,
+      url: nftUrl2,
       method: "POST",
       headers: {
-        "x-api-key": xKey,
+        "x-api-key": xKey2,
       },
       data: {
         network: "devnet",
@@ -80,9 +94,6 @@ const Membership = () => {
       .catch((err) => {
         console.warn(err);
       });
-
-    var formData = new FormData();
-    if (memToken) {
       if (value === "green") {
         var todayDate = new Date().toISOString().slice(0, 10);
         var expDate = new Date(new Date().setMonth(new Date().getMonth() + 3))
@@ -190,14 +201,14 @@ const Membership = () => {
         // Handle the response from backend here
         .then(async (res) => {
           //console.log(res.data);
-          
+
           console.log("NFTs: ");
           if (res.data.success === true) {
             const transaction = res.data.result.encoded_transaction;
             const ret_result = await signAndConfirm(
               "devnet",
               transaction,
-              callback,
+              callback2,
               privKey
             ); //flow from here goes to utility func
             console.log(ret_result);
@@ -219,7 +230,9 @@ const Membership = () => {
           .toISOString()
           .slice(0, 10);
         formData.append("name", "Green Tier");
-        formData.append("file", Green);
+        formData.append("file", new File(["red-heart"],Green));
+        // formData.append('file', fs.createReadStream(path.resolve(__dirname, Green)));
+        
         formData.append(
           "attributes",
           JSON.stringify([
@@ -243,12 +256,12 @@ const Membership = () => {
         );
         formData.append(
           "service_charge",
-          JSON.stringify([
+          [
             {
-              receiver: publicKey,
-              amount: 0.5
+              "receiver": publicKey,
+              "amount": 0.5,
             },
-          ])
+          ]
         );
       } else if (value === "blue") {
         var todayDate = new Date().toISOString().slice(0, 10);
@@ -283,7 +296,7 @@ const Membership = () => {
           JSON.stringify([
             {
               receiver: publicKey,
-              amount: 1.0
+              amount: 1.0,
             },
           ])
         );
@@ -320,22 +333,20 @@ const Membership = () => {
           JSON.stringify([
             {
               receiver: publicKey,
-              amount: 1.2
+              amount: 1.2,
             },
           ])
         );
       }
+      formData.append("network", "devnet");
       formData.append("creator_wallet", publicKey);
       formData.append("fee_payer", walletId);
-      formData.append("symbol","MEM");
-      formData.append("max_supply",0);
-      formData.append("royalty",1);
-
-
-
+      formData.append("symbol", "MEM");
+      formData.append("max_supply", 0);
+      formData.append("royalty", 1);
+      formData.append("receiver", walletId);
       const xKey = process.env.REACT_APP_API_KEY;
       const privKey = process.env.REACT_APP_PRIV_KEY;
-      
 
       let nftUrl = `https://api.shyft.to/sol/v2/nft/create`;
       axios({
@@ -354,11 +365,10 @@ const Membership = () => {
           console.log("NFTs: ");
           if (res.data.success === true) {
             const transaction = res.data.result.encoded_transaction;
-            const ret_result = await signAndConfirm(
+            const ret_result = await signAndConfirmTransaction(
               "devnet",
               transaction,
-              callback,
-              privKey
+              callback2
             ); //flow from here goes to utility func
             console.log(ret_result);
           } else {
@@ -369,8 +379,6 @@ const Membership = () => {
         .catch((err) => {
           console.warn(err);
         });
-
-
     }
   };
   return (
