@@ -5,7 +5,7 @@ import Blue from "./resources/images/blue-heart.jpeg";
 import Green from "./resources/images/green-heart.jpeg";
 import { WalletContext } from "./WalletContext";
 import axios from "axios";
-import { signAndConfirm } from "./utility/common";
+import { signAndConfirm,signAndConfirmTransaction } from "./utility/common";
 
 const Membership = () => {
   const { walletId } = useContext(WalletContext);
@@ -20,6 +20,59 @@ const Membership = () => {
     const memToken = ReactSession.get("subs_addr") ?? null;
 
     //deduct api call here
+    const xKey = process.env.REACT_APP_API_KEY;
+      const endPoint = process.env.REACT_APP_URL_EP;
+      var amount_to_be_deducted = 0;
+      if (value === "green")
+      {
+        amount_to_be_deducted = 0.5;
+      }
+      else if(value === "blue")
+      {
+        amount_to_be_deducted = 1;
+      }
+      else
+      {
+        amount_to_be_deducted = 1.2;
+      }
+      const publicKey = process.env.REACT_APP_PUB_KEY; //marketplace owner wallet
+
+      let nftUrl = `${endPoint}wallet/send_sol_detach`;
+      axios({
+        // Endpoint to get NFTs
+        url: nftUrl,
+        method: "POST",
+        headers: {
+          "x-api-key": xKey,
+        },
+        data: {
+            "network": "devnet",
+            "from_address": walletId,
+            "to_address": publicKey,
+            "amount": amount_to_be_deducted 
+          
+        },
+      })
+        // Handle the response from backend here
+        .then(async (res) => {
+          //console.log(res.data);
+          console.log("NFTs: ");
+          if (res.data.success === true) {
+            const transaction = res.data.result.encoded_transaction;
+            const ret_result = await signAndConfirmTransaction(
+              "devnet",
+              transaction,
+              callback
+            ); //flow from here goes to utility func
+            console.log(ret_result);
+          } else {
+            console.log("failed");
+          }
+        })
+        // Catch errors if any
+        .catch((err) => {
+          console.warn(err);
+        });
 
     
     var formData = new FormData();
