@@ -49,11 +49,11 @@ const Checker = () => {
                     }
                     
                     allNfts.forEach(element => {
-                        if(element.name === 'Red' || element.name === 'Green' || element.name === 'Blue')
+                        if(element.name === 'Red Tier' || element.name === 'Green Tier' || element.name === 'Blue Tier')
                         {
                             ReactSession.set("subs_name", element.name);
                             ReactSession.set("subs_addr", element.mint);
-                            ReactSession.set("subs_expr", element.attributes.end_date)
+                            ReactSession.set("subs_expr", element.attributes.exp_date)
                             ReactSession.set("subs_discount", element.attributes.discount)
 
                             console.log("Memberships ends on: ",element.attributes.end_date);

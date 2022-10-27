@@ -32,8 +32,8 @@ const ServiceComponent = () => {
                     <h2 className="main-heading text-center">Hearthstore</h2>
                     <h4 className="sub-heading mb-5 text-center">Just another fantasy marketplace for your 8-bit needs.</h4>
                     {activ && 
-                        <p className='bit-lead my-4'>
-                            Your Current Active Subscription: {subname}
+                        <p className='bit-lead my-4 text-center'>
+                            Your Current Active Subscription: <b>{subname}</b>
                         </p>
                     }
                     <div className="card-section py-5 w-75 mx-auto">

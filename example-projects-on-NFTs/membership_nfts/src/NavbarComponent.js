@@ -22,9 +22,9 @@ const NavBarComponent = () => {
                                 <li className="nav-item icons-menu">
                                     <Link className="mx-3 pt-1" to="/membership">subscribe</Link>
                                     <Link className="mx-3 pt-1" to="/login">login</Link>
-                                    <a className="highlight mx-3" href="" target="_blank" rel="noreferrer">Get API key</a>
+                                    <a className="highlight mx-3" href="https://shyft.to/get-api-key" target="_blank" rel="noreferrer">Get API key</a>
                                     {/* <a className="btn-solid-grad-xs-2 mx-3" href="https://shyft.to/get-api-key" target="_blank" rel="noreferrer">Get API key</a> */}
-                                    <a type="button" className="btn btn-link px-2" href="" target="_blank" rel="noreferrer"> <img className="github-icon" src={github} alt="Github Repo" /> </a>
+                                    <a type="button" className="btn btn-link px-2" href="https://github.com/Shyft-to/example-projects/tree/main/example-projects-on-NFTs/membership_nfts" target="_blank" rel="noreferrer"> <img className="github-icon" src={github} alt="Github Repo" /> </a>
                                     
                                 </li>
                             </ul>

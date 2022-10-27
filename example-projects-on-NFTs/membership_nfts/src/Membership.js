@@ -22,6 +22,7 @@ const Membership = () => {
     console.log("result ", result);
   };
   const callback2 = (signature, result) => {
+    console.log("Sigining Transaction");
     console.log("Signature ", signature);
     console.log("result ", result);
     console.log("In callback 2");
@@ -94,13 +95,16 @@ const Membership = () => {
       .catch((err) => {
         console.warn(err);
       });
+
+
+
       if (value === "green") {
         var todayDate = new Date().toISOString().slice(0, 10);
         var expDate = new Date(new Date().setMonth(new Date().getMonth() + 3))
           .toISOString()
           .slice(0, 10);
         formData.append("name", "Green Tier");
-        formData.append("file", Green);
+        formData.append("file", new File(["redheart"],Green));
         formData.append(
           "attributes",
           JSON.stringify([
@@ -128,7 +132,7 @@ const Membership = () => {
           .toISOString()
           .slice(0, 10);
         formData.append("name", "Blue Tier");
-        formData.append("file", Blue);
+        formData.append("file", new File(["redheart"],Blue));
         formData.append(
           "attributes",
           JSON.stringify([
@@ -156,7 +160,7 @@ const Membership = () => {
           .toISOString()
           .slice(0, 10);
         formData.append("name", "Red Tier");
-        formData.append("file", Red);
+        formData.append("file", new File(["redheart"],Red));
         formData.append(
           "attributes",
           JSON.stringify([
@@ -186,6 +190,7 @@ const Membership = () => {
       const xKey = process.env.REACT_APP_API_KEY;
       const endPoint = process.env.REACT_APP_URL_EP;
       const privKey = process.env.REACT_APP_PRIV_KEY;
+      const pub_Key = process.env.REACT_APP_PUB_KEY;
 
       let nftUrl = `${endPoint}nft/update_detach`;
       axios({
@@ -208,8 +213,8 @@ const Membership = () => {
             const ret_result = await signAndConfirm(
               "devnet",
               transaction,
-              callback2,
-              privKey
+              privKey,
+              callback2
             ); //flow from here goes to utility func
             console.log(ret_result);
           } else {
@@ -230,7 +235,7 @@ const Membership = () => {
           .toISOString()
           .slice(0, 10);
         formData.append("name", "Green Tier");
-        formData.append("file", new File(["red-heart"],Green));
+        formData.append("image", new File(["redheart"],Green));
         // formData.append('file', fs.createReadStream(path.resolve(__dirname, Green)));
         
         formData.append(
@@ -256,12 +261,12 @@ const Membership = () => {
         );
         formData.append(
           "service_charge",
-          [
+          JSON.stringify(
             {
               "receiver": publicKey,
               "amount": 0.5,
             },
-          ]
+          )
         );
       } else if (value === "blue") {
         var todayDate = new Date().toISOString().slice(0, 10);
@@ -269,7 +274,7 @@ const Membership = () => {
           .toISOString()
           .slice(0, 10);
         formData.append("name", "Blue Tier");
-        formData.append("file", Blue);
+        formData.append("image", new File(["redheart"],Blue));
         formData.append(
           "attributes",
           JSON.stringify([
@@ -293,12 +298,12 @@ const Membership = () => {
         );
         formData.append(
           "service_charge",
-          JSON.stringify([
+          JSON.stringify(
             {
-              receiver: publicKey,
-              amount: 1.0,
+              "receiver": publicKey,
+              "amount": 1.0,
             },
-          ])
+          )
         );
       } else {
         var todayDate = new Date().toISOString().slice(0, 10);
@@ -306,7 +311,7 @@ const Membership = () => {
           .toISOString()
           .slice(0, 10);
         formData.append("name", "Red Tier");
-        formData.append("file", Red);
+        formData.append("image", new File(["redheart"],Red));
         formData.append(
           "attributes",
           JSON.stringify([
@@ -330,12 +335,12 @@ const Membership = () => {
         );
         formData.append(
           "service_charge",
-          JSON.stringify([
+          JSON.stringify(
             {
-              receiver: publicKey,
-              amount: 1.2,
+              "receiver": publicKey,
+              "amount": 1.2,
             },
-          ])
+          )
         );
       }
       formData.append("network", "devnet");
@@ -362,7 +367,7 @@ const Membership = () => {
         // Handle the response from backend here
         .then(async (res) => {
           //console.log(res.data);
-          console.log("NFTs: ");
+          // console.log("NFTs: ");
           if (res.data.success === true) {
             const transaction = res.data.result.encoded_transaction;
             const ret_result = await signAndConfirmTransaction(
