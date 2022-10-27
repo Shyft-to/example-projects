@@ -1,0 +1,68 @@
+.background-1
+{
+  padding: 120px 0px;
+}
+
+.main-heading
+{
+  font: 400 8rem/8.5rem "VT323", monospace;
+  letter-spacing: 10px !important;
+}
+.sub-heading
+{
+  font-family: "VT323", monospace;
+  font-size: 40px !important;
+}
+.cfont
+{
+  font-family: "VT323", monospace;
+}
+.card-img-top
+{
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border: 2px solid white;
+}
+
+.our-navbar {
+  background-color: rgba(213, 255, 251, 0.4);
+  opacity: 1;
+  backdrop-filter: blur(4px);
+}
+
+.our-navbar a {
+  text-decoration: none;
+  color: #112f4a;
+  font: 600 1.4rem/1.75rem "VT323", sans-serif;
+  letter-spacing: 2px;
+}
+
+
+
+.icons-menu
+{
+  margin-left: auto;
+}
+
+.github-icon
+{
+  width: 50px;
+}
+.highlight
+{
+  background-color: black;
+  padding: 10px;
+  color: #fff !important;
+  border-radius: 4px;
+}
+
+.bit-btn
+{
+  font: 400 0.9rem/1.75rem "Poppins", sans-serif;
+  letter-spacing: 1px;
+}
+.bit-lead
+{
+  font: 400 0.9rem/1.2rem "Poppins", sans-serif;
+}
