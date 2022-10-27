@@ -5,7 +5,7 @@ import Blue from "./resources/images/blue-heart.jpeg";
 import Green from "./resources/images/green-heart.jpeg";
 import { WalletContext } from "./WalletContext";
 import axios from "axios";
-import { signAndConfirm, signAndConfirmTransaction } from "./utility/common";
+import { signAndConfirm, signAndConfirmTransaction,signAndConfirmBoth } from "./utility/common";
 import { ReactSession } from "react-client-session";
 // import {fs} from 'fs';
 // import path from 'path';
@@ -370,11 +370,14 @@ const Membership = () => {
           // console.log("NFTs: ");
           if (res.data.success === true) {
             const transaction = res.data.result.encoded_transaction;
-            const ret_result = await signAndConfirmTransaction(
+            console.log(transaction);
+            const ret_result = await signAndConfirmBoth(
               "devnet",
               transaction,
+              privKey,
               callback2
             ); //flow from here goes to utility func
+            
             console.log(ret_result);
           } else {
             console.log("failed");
