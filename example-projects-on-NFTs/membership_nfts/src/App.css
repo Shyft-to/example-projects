@@ -66,3 +66,14 @@
 {
   font: 400 0.9rem/1.2rem "Poppins", sans-serif;
 }
+.footers
+{
+  height: 130px;
+  width: 100%;
+  background-color: rgba(213, 255, 251, 0.4);
+  padding: 10px 0px 60px;
+}
+.footers a
+{
+  text-decoration: none;
+}

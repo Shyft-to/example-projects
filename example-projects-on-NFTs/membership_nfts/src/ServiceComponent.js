@@ -5,6 +5,8 @@ import item4 from "./resources/market-images/funny.gif";
 import item5 from "./resources/market-images/pizza-pizza-time.gif";
 import item6 from "./resources/market-images/thanos.gif";
 
+import pixHeart from "./resources/pix-heart.png";
+
 import { ReactSession } from "react-client-session";
 import { useEffect, useState } from "react";
 
@@ -190,6 +192,13 @@ const ServiceComponent = () => {
               </div>
             </div>
           </div>
+        </div>
+        
+      </div>
+      <div className="w-100 footers pb-5">
+        <div className="text-center">
+            <p className="bit-lead my-4"><b>Hearthstore is a sample marketplace designed to illustrate NFT based membership pass. This just illustrates discounts based on NFTs and does not actually sell products.</b></p>
+            <p className="bit-lead"><b>Made with <img src={pixHeart} alt="" style={{width: "20px"}}/> by <a href="https://shyft.to/" target="_blank" rel="noreferrer"> SHYFT</a>  </b></p>
         </div>
       </div>
     </div>

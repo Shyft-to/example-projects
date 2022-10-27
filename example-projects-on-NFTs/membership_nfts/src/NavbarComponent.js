@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
 import github from "./resources/images/GitHub-logo.gif";
+import { useContext } from "react";
+import { WalletContext } from "./WalletContext";
 const NavBarComponent = () => {
+    const { walletId } = useContext(WalletContext);
   return (
     <div>
       <nav className="navbar navbar-expand-sm navbar-dark fixed-top our-navbar">
@@ -20,9 +23,11 @@ const NavBarComponent = () => {
                                 </li> */}
                                 
                                 <li className="nav-item icons-menu">
-                                    <Link className="mx-3 pt-1" to="/membership">subscribe</Link>
-                                    <Link className="mx-3 pt-1" to="/login">login</Link>
-                                    <a className="highlight mx-3" href="https://shyft.to/get-api-key" target="_blank" rel="noreferrer">Get API key</a>
+                                    <Link className="mx-3 pt-1" to="/">store</Link>
+
+                                    {(walletId) &&<Link className="mx-3 pt-1" to="/membership">subscribe</Link>}
+                                    {(!walletId) && <Link className="mx-3 pt-1" to="/login">login</Link>}
+                                    {(walletId===null)?(<a className="highlight mx-3" href="https://shyft.to/get-api-key" target="_blank" rel="noreferrer">Get API key</a>):(<a className="highlight mx-3" href="" target="_blank" rel="noreferrer">{walletId.substring(1, 6)+'....'}</a>)}
                                     {/* <a className="btn-solid-grad-xs-2 mx-3" href="https://shyft.to/get-api-key" target="_blank" rel="noreferrer">Get API key</a> */}
                                     <a type="button" className="btn btn-link px-2" href="https://github.com/Shyft-to/example-projects/tree/main/example-projects-on-NFTs/membership_nfts" target="_blank" rel="noreferrer"> <img className="github-icon" src={github} alt="Github Repo" /> </a>
                                     
