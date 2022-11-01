@@ -36,14 +36,17 @@ const Checker = () => {
       // Handle the response from backend here
       .then((res) => {
         //console.log(res.data);
-        console.log("NFTs: ");
+        console.log("NFTs: im here");
         if (res.data.success === true) {
           const allNfts = res.data.result;
+          console.log(allNfts);
           if (allNfts.length < 1) {
+
             navigate("/membership");
           }
 
           allNfts.forEach((element) => {
+
             if (
               element.name === "Red Tier" ||
               element.name === "Green Tier" ||
@@ -54,24 +57,25 @@ const Checker = () => {
               ReactSession.set("subs_expr", element.attributes.exp_date);
               ReactSession.set("subs_discount", element.attributes.discount);
 
-              console.log("Memberships ends on: ", element.attributes.end_date);
+              console.log("Memberships ends on: ", element.attributes.exp_date);
 
               var todayDate = new Date().toISOString().slice(0, 10);
               var dateToday = new Date(todayDate);
-              var dateExpiry = new Date(element.attributes.end_date);
+              var dateExpiry = new Date(element.attributes.exp_date);
               var diffDays = parseInt(
                 (dateExpiry - dateToday) / (1000 * 60 * 60 * 24),
                 10
               );
-
-              if (diffDays > 0) {
-                navigate("/membership");
+              console.log(diffDays);
+              if (diffDays < 0) {
                 ReactSession.set("subs_actv", false);
+                navigate("/membership");
               } else {
                 ReactSession.set("subs_actv", true);
-                navigate("/");
+                navigate('/');
               }
-            } else navigate("/membership");
+            } 
+            
           });
         } else {
         }

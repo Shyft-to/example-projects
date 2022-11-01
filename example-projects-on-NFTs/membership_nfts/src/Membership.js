@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Red from "./resources/images/red-heart.png";
-import Blue from "./resources/images/blue-heart.jpeg";
-import Green from "./resources/images/green-heart.jpeg";
+import Blue from "./resources/images/blue-heart.png";
+import Green from "./resources/images/green-heart.png";
 import { WalletContext } from "./WalletContext";
 import axios from "axios";
 import { signAndConfirm, signAndConfirmTransaction,signAndConfirmBoth } from "./utility/common";
@@ -20,6 +20,7 @@ const Membership = () => {
   const callback = (signature, result) => {
     console.log("Signature ", signature);
     console.log("result ", result);
+    console.log("Money Deducted");
   };
   const callback2 = (signature, result) => {
     console.log("Sigining Transaction");
@@ -183,14 +184,15 @@ const Membership = () => {
           ])
         );
       }
+      const pub_Key = process.env.REACT_APP_PUB_KEY;
       formData.append("network", "devnet");
-      formData.append("wallet", walletId);
+      formData.append("wallet", pub_Key);
       formData.append("token_address", memToken);
 
       const xKey = process.env.REACT_APP_API_KEY;
       const endPoint = process.env.REACT_APP_URL_EP;
       const privKey = process.env.REACT_APP_PRIV_KEY;
-      const pub_Key = process.env.REACT_APP_PUB_KEY;
+      //const pub_Key = process.env.REACT_APP_PUB_KEY;
 
       let nftUrl = `${endPoint}nft/update_detach`;
       axios({
@@ -235,7 +237,9 @@ const Membership = () => {
           .toISOString()
           .slice(0, 10);
         formData.append("name", "Green Tier");
-        formData.append("image", new File(["redheart"],Green));
+        formData.append("image", new File(["redheart"],Green,{
+          type: "image/png",
+        }));
         // formData.append('file', fs.createReadStream(path.resolve(__dirname, Green)));
         
         formData.append(
