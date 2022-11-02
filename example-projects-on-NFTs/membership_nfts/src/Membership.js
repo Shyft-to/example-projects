@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext,useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Red from "./resources/images/red-heart.png";
 import Blue from "./resources/images/blue-heart.png";
@@ -7,14 +7,61 @@ import { WalletContext } from "./WalletContext";
 import axios from "axios";
 import { signAndConfirm, signAndConfirmTransaction,signAndConfirmBoth } from "./utility/common";
 import { ReactSession } from "react-client-session";
-// import {fs} from 'fs';
-// import path from 'path';
+// import { createReadStream } from 'browserify-fs';
+// import { resolve } from 'path';
 // import { BinaryFile } from 'react-native-binary-file';
 
 const Membership = () => {
   const { walletId } = useContext(WalletContext);
   // reader.readAsText(Red);
+  // var fl = new File(["red-heart"],'./resources/images/red-heart.png');
   // console.log(new File(["red-heart"],Green));
+  // console.log(createReadStream(resolve(__dirname, './resources/images/red-heart.png')))
+  // console.log(new FileReader(fl))
+  // const images = require("./resources/images/red-heart.png");
+  // console.log(images);
+
+ const [redFileRead,setRedFile] = useState();
+ const [greenFileRead,setGreenFile] = useState();
+ const [blueFileRead,setBlueFile] = useState();
+//  var tmpFile = ""
+//  var tmpFile2 = ""
+//  var tmpFile3 = ""
+  useEffect(() => {
+    async function readFiles()
+    {
+      // await axios(Red).then(res => tmpFile = res.data); // This will have your text inside data attribute
+      // var redFile = new Blob([tmpFile], { type: 'image/png' });
+      // setRedFile(redFile);
+
+      // await axios(Green).then(res => tmpFile2 = res.data); // This will have your text inside data attribute
+      // var greenFile = new Blob([tmpFile2], { type: 'image/png' });
+      // setGreenFile(greenFile);
+
+      // await axios(Blue).then(res => tmpFile3 = res.data); // This will have your text inside data attribute
+      // var blueFile = new Blob([tmpFile3], { type: 'image/png' });
+      // setBlueFile(blueFile);
+      const imgData = await axios.get('https://nft-membership-pass.vercel.app/static/media/green-heart.a04b035c23b3f48155b4.png', { responseType: 'stream' });
+      setGreenFile(imgData);
+
+      const imgData2 = await axios.get('https://nft-membership-pass.vercel.app/static/media/blue-heart.8d8f55192961a5f6036b.png', { responseType: 'stream' });
+      setBlueFile(imgData2);
+
+      const imgData3 = await axios.get('https://nft-membership-pass.vercel.app/static/media/red-heart.27a615f1284e5b509cf1.png', { responseType: 'stream' });
+      setRedFile(imgData3);
+
+    }
+    
+    readFiles();
+ },[])
+
+// const reader = new FileReader(Red);
+// reader.readAsArrayBuffer();
+// reader.onloadend(() => {
+//   console.log(reader);
+// })
+
+
   const navigate = useNavigate();
   // console.log(URL.createObjectURL(Red))
   const callback = (signature, result) => {
@@ -51,51 +98,51 @@ const Membership = () => {
       //deduct api call here
     const xKey2 = process.env.REACT_APP_API_KEY;
     const endPoint2 = process.env.REACT_APP_URL_EP;
-    var amount_to_be_deducted = 0;
-    if (value === "green") {
-      amount_to_be_deducted = 0.5;
-    } else if (value === "blue") {
-      amount_to_be_deducted = 1;
-    } else {
-      amount_to_be_deducted = 1.2;
-    }
+    // var amount_to_be_deducted = 0;
+    // if (value === "green") {
+    //   amount_to_be_deducted = 0.5;
+    // } else if (value === "blue") {
+    //   amount_to_be_deducted = 1;
+    // } else {
+    //   amount_to_be_deducted = 1.2;
+    // }
     const publicKey = process.env.REACT_APP_PUB_KEY; //marketplace owner wallet
 
-    let nftUrl2 = `${endPoint2}wallet/send_sol_detach`;
-    axios({
-      // Endpoint to get NFTs
-      url: nftUrl2,
-      method: "POST",
-      headers: {
-        "x-api-key": xKey2,
-      },
-      data: {
-        network: "devnet",
-        from_address: walletId,
-        to_address: publicKey,
-        amount: amount_to_be_deducted,
-      },
-    })
-      // Handle the response from backend here
-      .then(async (res) => {
-        //console.log(res.data);
-        console.log("NFTs: ");
-        if (res.data.success === true) {
-          const transaction = res.data.result.encoded_transaction;
-          const ret_result = await signAndConfirmTransaction(
-            "devnet",
-            transaction,
-            callback
-          ); //flow from here goes to utility func
-          console.log(ret_result);
-        } else {
-          console.log("failed");
-        }
-      })
-      // Catch errors if any
-      .catch((err) => {
-        console.warn(err);
-      });
+    // let nftUrl2 = `${endPoint2}wallet/send_sol_detach`;
+    // axios({
+    //   // Endpoint to get NFTs
+    //   url: nftUrl2,
+    //   method: "POST",
+    //   headers: {
+    //     "x-api-key": xKey2,
+    //   },
+    //   data: {
+    //     network: "devnet",
+    //     from_address: walletId,
+    //     to_address: publicKey,
+    //     amount: amount_to_be_deducted,
+    //   },
+    // })
+    //   // Handle the response from backend here
+    //   .then(async (res) => {
+    //     //console.log(res.data);
+    //     console.log("NFTs: ");
+    //     if (res.data.success === true) {
+    //       const transaction = res.data.result.encoded_transaction;
+    //       const ret_result = await signAndConfirmTransaction(
+    //         "devnet",
+    //         transaction,
+    //         callback
+    //       ); //flow from here goes to utility func
+    //       console.log(ret_result);
+    //     } else {
+    //       console.log("failed");
+    //     }
+    //   })
+    //   // Catch errors if any
+    //   .catch((err) => {
+    //     console.warn(err);
+    //   });
 
 
 
@@ -105,7 +152,7 @@ const Membership = () => {
           .toISOString()
           .slice(0, 10);
         formData.append("name", "Green Tier");
-        formData.append("file", new File(["redheart"],Green));
+        formData.append("image", new File(["redheart.png"],Green));
         formData.append(
           "attributes",
           JSON.stringify([
@@ -127,13 +174,22 @@ const Membership = () => {
             },
           ])
         );
+        formData.append(
+          "service_charge",
+          JSON.stringify(
+            {
+              "receiver": publicKey,
+              "amount": 0.5,
+            },
+          )
+        );
       } else if (value === "blue") {
         var todayDate = new Date().toISOString().slice(0, 10);
         var expDate = new Date(new Date().setMonth(new Date().getMonth() + 6))
           .toISOString()
           .slice(0, 10);
         formData.append("name", "Blue Tier");
-        formData.append("file", new File(["redheart"],Blue));
+        formData.append("image", new File(["redheart.png"],Blue));
         formData.append(
           "attributes",
           JSON.stringify([
@@ -155,13 +211,22 @@ const Membership = () => {
             },
           ])
         );
+        formData.append(
+          "service_charge",
+          JSON.stringify(
+            {
+              "receiver": publicKey,
+              "amount": 1.0,
+            },
+          )
+        );
       } else {
         var todayDate = new Date().toISOString().slice(0, 10);
         var expDate = new Date(new Date().setMonth(new Date().getMonth() + 9))
           .toISOString()
           .slice(0, 10);
         formData.append("name", "Red Tier");
-        formData.append("file", new File(["redheart"],Red));
+        formData.append("image", new File(["redheart.png"],Red));
         formData.append(
           "attributes",
           JSON.stringify([
@@ -183,18 +248,28 @@ const Membership = () => {
             },
           ])
         );
+        formData.append(
+          "service_charge",
+          JSON.stringify(
+            {
+              "receiver": publicKey,
+              "amount": 1.2,
+            },
+          )
+        );
       }
-      const pub_Key = process.env.REACT_APP_PUB_KEY;
+      //const pub_Key = process.env.REACT_APP_PUB_KEY;
       formData.append("network", "devnet");
-      formData.append("wallet", pub_Key);
+      formData.append("update_authority_address", publicKey);
       formData.append("token_address", memToken);
+      formData.append("fee_payer", walletId);
 
       const xKey = process.env.REACT_APP_API_KEY;
-      const endPoint = process.env.REACT_APP_URL_EP;
+      //const endPoint = process.env.REACT_APP_URL_EP;
       const privKey = process.env.REACT_APP_PRIV_KEY;
       //const pub_Key = process.env.REACT_APP_PUB_KEY;
 
-      let nftUrl = `${endPoint}nft/update_detach`;
+      let nftUrl = `https://api.shyft.to/sol/v2/nft/update`;
       axios({
         // Endpoint to get NFTs
         url: nftUrl,
@@ -209,15 +284,16 @@ const Membership = () => {
         .then(async (res) => {
           //console.log(res.data);
 
-          console.log("NFTs: ");
+          console.log("Trying to Sign Transaction");
           if (res.data.success === true) {
             const transaction = res.data.result.encoded_transaction;
-            const ret_result = await signAndConfirm(
+            console.log(transaction);
+            const ret_result = await signAndConfirmBoth(
               "devnet",
               transaction,
               privKey,
               callback2
-            ); //flow from here goes to utility func
+            );
             console.log(ret_result);
           } else {
             console.log("failed");
@@ -237,7 +313,7 @@ const Membership = () => {
           .toISOString()
           .slice(0, 10);
         formData.append("name", "Green Tier");
-        formData.append("image", new File(["redheart"],Green,{
+        formData.append("image", new File(["redheart.png"],Green,{
           type: "image/png",
         }));
         // formData.append('file', fs.createReadStream(path.resolve(__dirname, Green)));
@@ -278,7 +354,7 @@ const Membership = () => {
           .toISOString()
           .slice(0, 10);
         formData.append("name", "Blue Tier");
-        formData.append("image", new File(["redheart"],Blue));
+        formData.append("image", new File(["redheart.png"],Blue));
         formData.append(
           "attributes",
           JSON.stringify([
@@ -315,7 +391,7 @@ const Membership = () => {
           .toISOString()
           .slice(0, 10);
         formData.append("name", "Red Tier");
-        formData.append("image", new File(["redheart"],Red));
+        formData.append("image", new File(["redheart.png"],Red));
         formData.append(
           "attributes",
           JSON.stringify([
@@ -419,7 +495,7 @@ const Membership = () => {
                       Green Tier (3 months)
                     </h4>
                     <p className="card-text text-light cfont">
-                      20% discount - 0.5 SOL
+                      10% discount - 0.5 SOL
                     </p>
                     <button
                       className="btn btn-light py-0 px-3 rounded-pill cfont"
@@ -446,7 +522,7 @@ const Membership = () => {
                       Blue Tier (6 months)
                     </h4>
                     <p className="card-text text-light cfont">
-                      30% discount - 1 SOL
+                      20% discount - 1 SOL
                     </p>
                     <button
                       className="btn btn-light py-0 px-3 rounded-pill cfont"
