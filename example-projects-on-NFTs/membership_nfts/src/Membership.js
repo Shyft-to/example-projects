@@ -87,64 +87,15 @@ const Membership = () => {
     const memToken = ReactSession.get("subs_addr") ?? null;
     console.log(memToken);
     
-    // var green_file;
-
-    // const readFiles = async () => {
-    //   const readFileGreen = await BinaryFile.open('path-to-file');
-    // } 
+    
     var formData = new FormData();
     if (memToken) {
 
       //deduct api call here
     const xKey2 = process.env.REACT_APP_API_KEY;
     const endPoint2 = process.env.REACT_APP_URL_EP;
-    // var amount_to_be_deducted = 0;
-    // if (value === "green") {
-    //   amount_to_be_deducted = 0.5;
-    // } else if (value === "blue") {
-    //   amount_to_be_deducted = 1;
-    // } else {
-    //   amount_to_be_deducted = 1.2;
-    // }
+    
     const publicKey = process.env.REACT_APP_PUB_KEY; //marketplace owner wallet
-
-    // let nftUrl2 = `${endPoint2}wallet/send_sol_detach`;
-    // axios({
-    //   // Endpoint to get NFTs
-    //   url: nftUrl2,
-    //   method: "POST",
-    //   headers: {
-    //     "x-api-key": xKey2,
-    //   },
-    //   data: {
-    //     network: "devnet",
-    //     from_address: walletId,
-    //     to_address: publicKey,
-    //     amount: amount_to_be_deducted,
-    //   },
-    // })
-    //   // Handle the response from backend here
-    //   .then(async (res) => {
-    //     //console.log(res.data);
-    //     console.log("NFTs: ");
-    //     if (res.data.success === true) {
-    //       const transaction = res.data.result.encoded_transaction;
-    //       const ret_result = await signAndConfirmTransaction(
-    //         "devnet",
-    //         transaction,
-    //         callback
-    //       ); //flow from here goes to utility func
-    //       console.log(ret_result);
-    //     } else {
-    //       console.log("failed");
-    //     }
-    //   })
-    //   // Catch errors if any
-    //   .catch((err) => {
-    //     console.warn(err);
-    //   });
-
-
 
       if (value === "green") {
         var todayDate = new Date().toISOString().slice(0, 10);

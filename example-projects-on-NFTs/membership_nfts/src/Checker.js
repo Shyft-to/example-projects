@@ -44,7 +44,7 @@ const Checker = () => {
 
             navigate("/membership");
           }
-
+          var subscription_found = false;
           allNfts.forEach((element) => {
 
             if (
@@ -52,6 +52,7 @@ const Checker = () => {
               element.name === "Green Tier" ||
               element.name === "Blue Tier"
             ) {
+              subscription_found = true;
               ReactSession.set("subs_name", element.name);
               ReactSession.set("subs_addr", element.mint);
               ReactSession.set("subs_expr", element.attributes.exp_date);
@@ -66,7 +67,7 @@ const Checker = () => {
                 (dateExpiry - dateToday) / (1000 * 60 * 60 * 24),
                 10
               );
-              console.log(diffDays);
+              //console.log(diffDays);
               if (diffDays < 0) {
                 ReactSession.set("subs_actv", false);
                 navigate("/membership");
@@ -77,6 +78,11 @@ const Checker = () => {
             } 
             
           });
+          if(subscription_found === false)
+          {
+            ReactSession.set("subs_actv", false);
+            navigate("/membership");
+          }
         } else {
         }
       })
