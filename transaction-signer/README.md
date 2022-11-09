@@ -1,5 +1,6 @@
 # Transaction Signers with SHYFT
-These are a few functions which you can use for signing `encoded_transaction` returned form SHYFT APIs. 
+
+The `signer.js` contains all the functions required for signing `encoded_transaction`s. These are a few functions which you can use for signing `encoded_transaction` returned form [SHYFT APIs](https://shyft.to). 
 
 Few of the functions require the `connection` object, and the `wallet` object. Here is how you can get them for phantom wallet.
 
@@ -110,6 +111,46 @@ This function accepts `connection`, the `encoded_transaction` from the SHYFT API
 We hope you can sign any transaction, using this signing tool offline, or you can also check out our online signing tool [here](https://shyft-insider.vercel.app). 
 
 
+# Usage
 
+Suppose we have just made a `create_v2` API call received the `encoded_transaction` in the response of the API call. Let us suppose that we require three signers to sign this `encoded_transaction`, where we have the private key of two signers available and one of the signers will sign it from the frontend. 
 
+```javascript
+    var encodedTransaction;
+    axios({
+      // Endpoint to get NFTs
+      url: `https://api.shyft.to/sol/v2/nft/create`,
+      method: "POST",
+      headers: {
+        "Content-Type": "multipart/form-data",
+        "x-api-key": x-Api-Key,
+      },
+      data: formData,
+    })
+      // Handle the response from backend here
+      .then(async (res) => {
+        encodedTransaction = res.data.result.encoded_transaction;
+        //encoded transaction received in response
 
+      })
+      // Catch errors if any
+      .catch((err) => {
+        console.warn(err);
+      });
+
+```  
+
+This `encodedTransaction` is then sent as a parameter to the function `partialSignWithKeysAndWallet()` along with private keys, wallet object, and connection in the following manner.
+
+```javascript
+const phantom = new PhantomWalletAdapter();
+await phantom.connect(); //wallet object
+const rpcUrl = clusterApiUrl(network);
+const connection = new Connection(rpcUrl, "confirmed"); //connection
+
+privateKeys = ["privatekey1","privatekey2"]
+
+const finalizedTxn = partialSignWithKeysAndWallet(connection,encodedTransaction,privateKeys,phantom ); //This will successfully sign the transaction
+```
+
+Also checkout our doc on Signing Transactions [here](https://docs.shyft.to/tutorials/how-to-sign-transactions-on-solana).
