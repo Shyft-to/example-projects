@@ -1,0 +1,93 @@
+
+.gradient-background
+{
+  background: #0F2027;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #111111, #0F2027);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(174.61deg, #111111 0%, #0F2027 99.2%); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  
+  
+    
+}
+.fields
+{
+  margin-top: 30px;
+}
+small
+{
+    font-family: "Poppins", sans-serif;
+    padding-bottom: 20px !important;
+    
+}
+.cfont
+{
+  font-family: "Poppins", sans-serif;
+}
+.fname
+{
+  font-family: "Poppins", sans-serif;
+  color: #fff;
+}
+p
+{
+  font-weight: 300;
+}
+.form-control
+{
+  background-color: #111111;
+  color: #fff;
+  font-family: "Poppins", sans-serif;
+  margin-top: 10px;
+}
+
+/* CSS */
+.button-24 {
+  background: #FF4742;
+  border: 1px solid #FF4742;
+  border-radius: 6px;
+  box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-block;
+  font-family: nunito,roboto,proxima-nova,"proxima nova",sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 16px;
+  min-height: 40px;
+  outline: 0;
+  padding: 12px 35px;
+  text-align: center;
+  text-rendering: geometricprecision;
+  text-transform: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  
+}
+.button-25 {
+    background: #5E5DF0;
+    border: 1px solid #5E5DF0;
+    border-radius: 6px;
+    box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    font-family: nunito,roboto,proxima-nova,"proxima nova",sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 16px;
+    min-height: 40px;
+    outline: 0;
+    padding: 12px 35px;
+    text-align: center;
+    text-rendering: geometricprecision;
+    text-transform: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: middle;
+    
+  }
+
