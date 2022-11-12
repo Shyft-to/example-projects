@@ -41,12 +41,12 @@ const CreateToken = () => {
 
     
     axios({
-        // Endpoint to send files
+        // Endpoint
         url: "https://api.shyft.to/sol/v1/token/create_detach",
         method: "POST",
         headers: {
           "Content-Type": "multipart/form-data",
-          "x-api-key": "",
+          "x-api-key": "", //Enter your API key here
           Accept: "*/*",
           "Access-Control-Allow-Origin": "*",
         },
@@ -78,11 +78,11 @@ const CreateToken = () => {
   const MintTo = () => {
     
     axios({
-      // Endpoint to send files
+      // API endpoint to mint and airdrop
       url: "https://api.shyft.to/sol/v1/token/mint_detach",
       method: "POST",
       headers: {
-        "x-api-key": "",
+        "x-api-key": "", //Enter your API key here
       },
       data: {
         "network": network,
