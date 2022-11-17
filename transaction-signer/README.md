@@ -110,7 +110,7 @@ This function accepts `connection`, the `encoded_transaction` from the SHYFT API
 
 We hope you can sign any transaction, using this signing tool offline, or you can also check out our online signing tool [here](https://shyft-insider.vercel.app). 
 
-## Signing Transaction with one wallet.
+## Signing more than one Transactions with one wallet.
 
 In certain situations, instead on one `encoded_transaction` SHYFT APIs return more than one, or an array of `encoded_transactions`, which will need a sign from the wallet in the frontend. In such cases, we will use the following function:
 
