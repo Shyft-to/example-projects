@@ -69,3 +69,26 @@ export async function partialSignWithKeysAndWallet(connection, encodedTransactio
 
 }
 
+//function for signing a series of encoded_transactions from the frontend in one go
+export async function confirmTransactionsFromFrontend(connection, encodedTransactions, wallet) {
+  
+    const recoveredTransactions = encodedTransactions.map((tx) => {
+      return Transaction.from(
+        Buffer.from(tx, 'base64')
+      );
+    });
+  
+    const signedTx = await wallet.signAllTransactions(recoveredTransactions); //signs all the transactions in the recoveredTransactions array in one go
+    
+    var sentTxns = [];
+    for await(const tx of signedTx)
+    {
+      const confirmTransaction = await connection.sendRawTransaction(
+        tx.serialize()
+      );
+      sentTxns.push(confirmTransaction);
+    }
+
+    return sentTxns; //returns an array of confirmedTxns
+    
+  }

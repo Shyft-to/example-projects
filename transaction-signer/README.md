@@ -110,6 +110,36 @@ This function accepts `connection`, the `encoded_transaction` from the SHYFT API
 
 We hope you can sign any transaction, using this signing tool offline, or you can also check out our online signing tool [here](https://shyft-insider.vercel.app). 
 
+## Signing Transaction with one wallet.
+
+In certain situations, instead on one `encoded_transaction` SHYFT APIs return more than one, or an array of `encoded_transactions`, which will need a sign from the wallet in the frontend. In such cases, we will use the following function:
+
+```javascript
+export async function confirmTransactionsFromFrontend(connection, encodedTransactions, wallet) {
+  
+    const recoveredTransactions = encodedTransactions.map((tx) => {
+      return Transaction.from(
+        Buffer.from(tx, 'base64')
+      );
+    });
+  
+    const signedTx = await wallet.signAllTransactions(recoveredTransactions); //signs all the transactions in the recoveredTransactions array in one go
+    
+    var sentTxns = [];
+    for await(const tx of signedTx)
+    {
+      const confirmTransaction = await connection.sendRawTransaction(
+        tx.serialize()
+      );
+      sentTxns.push(confirmTransaction);
+    }
+
+    return sentTxns;
+    
+  }
+```
+This function accepts `connection`, the `encoded_transactions` (an array of `encoded_transaction`) from the SHYFT API response and the `wallet` object. Details regarding the `connection` and `wallet` have been discussed at the start of this text.
+
 
 # Usage
 
