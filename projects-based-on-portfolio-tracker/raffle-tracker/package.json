@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@shyft-to/js": "^0.2.20",
+    "apexcharts": "^3.41.1",
+    "axios": "^1.4.0",
     "moment": "^2.29.4",
     "next": "13.4.19",
     "react": "18.2.0",

@@ -12,7 +12,11 @@ export const GET = async (req, res) => {
     const getAggData = calculateTotalSales(transactions);
     const getBuyers = countUniqueBuyers(transactions);
 
-    return NextResponse.json({agg_buyers: getBuyers});
+    return NextResponse.json({
+        transactions: transactions,
+        agg_data: getAggData,
+        agg_buyers: getBuyers
+    });
   } catch (error) {
     console.log(error.message);
     return NextResponse.json(

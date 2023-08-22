@@ -1,7 +1,23 @@
-
+"use client"
+import { useState,useEffect } from "react"
 import "../resources/assets/css/styles.min.css"
+// import ApexCharts from 'apexcharts'
+import axios from "axios";
 
 export default function Home() {
+  const [data,setData] = useState({});
+  useEffect(() => {
+    axios.request({
+      url: "/api/get-all-data",
+      method: "GET"
+    })
+    .then(res => {
+      console.log(res.data);
+      setData(res.data);
+    })
+    .catch(err => console.log("error,", error.message));
+  }, [])
+  
   return (
     <div className="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6">
       <div className="body-wrapper" style={{minHeight: "100vh"}}>
