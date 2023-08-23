@@ -11,16 +11,22 @@ export const GET = async (req, res) => {
     const transactions = await getAllTransaction(process.env.RAFFLE_ADDRESS, "devnet")
     const getAggData = calculateTotalSales(transactions);
     const getBuyers = countUniqueBuyers(transactions);
+    const formattedTxns = formatRecentTransactions(transactions);
+    const graphData = filterTxnForgraph(transactions);
 
     return NextResponse.json({
+        success: true,
         transactions: transactions,
         agg_data: getAggData,
-        agg_buyers: getBuyers
+        agg_buyers: getBuyers,
+        formatted_transactions: formattedTxns,
+        data_for_graph: graphData
     });
+    
   } catch (error) {
     console.log(error.message);
     return NextResponse.json(
-      { message: "Internal Server Error" },
+      { success: false, message: "Internal Server Error" },
       {
         status: 500,
       }
@@ -31,10 +37,16 @@ export const GET = async (req, res) => {
 async function getAllTransaction(address, network) {
   let transactions = [];
   let oldestTxnSignature = "";
-  const baseTime = new Date().toISOString();
-  
+  const baseTime = process.env.BASE_TIME ?? "2023-08-22T00:00:00.000Z";
+  var calcNextDay = new Date(baseTime);
+  calcNextDay.setDate(calcNextDay.getDate() + 1);
+  var nextDate = calcNextDay.toISOString();
+  // console.log("Next date for fetching Transactions: ",nextDate);
+  // console.log("Transactions will be fetched for: ",baseTime);
   var transactionFetchComplete = false;
   try {
+    const startFetchingTxnsFrom = await getLastTransactionOfTheDay(address,nextDate);
+    console.log("start Ftech: ",startFetchingTxnsFrom);
     while (!transactionFetchComplete) {
       var paramsToGetTransactions = {
         network: Network.Mainnet,
@@ -46,19 +58,25 @@ async function getAllTransaction(address, network) {
           ...paramsToGetTransactions,
           beforeTxSignature: oldestTxnSignature,
         };
-
+      else if(startFetchingTxnsFrom !== "")
+      {
+        paramsToGetTransactions = {
+          ...paramsToGetTransactions,
+          beforeTxSignature: startFetchingTxnsFrom,
+        };
+      } 
       const getTransactions = await shyftClient.transaction.history(
         paramsToGetTransactions
       );
-    //   console.log("calling Get transactions API")
-
+      console.log("calling Get transactions API from getall transaction")
+      console.log("Transaction received: ", getTransactions.length);
       if (getTransactions.length > 0)
         oldestTxnSignature =
           getTransactions[getTransactions.length - 1].signatures[0];
 
       for (let index = 0; index < getTransactions.length; index++) {
         const eachTransaction = getTransactions[index];
-        if (getDifferenceISO(baseTime, eachTransaction.timestamp) !== 0) {
+        if (getDifferenceISODay(baseTime, eachTransaction.timestamp) !== 0) {
           transactionFetchComplete = true;
           break;
         }
@@ -126,9 +144,20 @@ function countUniqueBuyers(transactions) {
                 countBuyer[currentInfo.buyer] = currentInfo.tickets;
             }
         })
+        var countBuyerArray = []
+        for(const key in countBuyer) {
+            if(countBuyer.hasOwnProperty(key)) {
+              const buyerObj = {
+                  buyer: key,
+                  tickets_bought: countBuyer[key]
+              }
+              countBuyerArray.push(buyerObj);
+            }
+        }
+        
         
         return {
-            buyers: countBuyer
+            buyers: countBuyerArray
         }
         
     } catch (error) {
@@ -139,9 +168,157 @@ function countUniqueBuyers(transactions) {
     }
 }
 
+function formatRecentTransactions(transactions)
+{
+  try {
+    if(transactions.length < 1)
+            throw new Error("NOT_ENOUGH_TXNS");
+    const no_of_txns = transactions.length > 4 ? 5 : transactions.length;
+    const formattedTxns = [];
+    for (let index = 0; index < no_of_txns; index++) {
+      const eachTransaction = transactions[index];
+      var formattedTxn = {
+        timestamp: eachTransaction.timestamp ?? "--",
+        buyer: shortenAddress(eachTransaction.actions[0].info.buyer) ?? "--",
+        tickets_bought: eachTransaction.actions[0].info.tickets ?? "--",
+      }
+      formattedTxns.push(formattedTxn);
+    }
+    return formattedTxns;
+  } catch (error) {
+    console.log(error.message);
+    return [];
+  }
+}
+function shortenAddress(address) {
+  try {
+      var trimmedString = "";
+      if (address === "")
+          return "unknown";
+      if (address != null || address.length > 16) {
+          trimmedString = (address.substring(0, 8) + "..." + address.substring(address.length - 5));
+      }
+      else {
+          trimmedString = address ?? "";
+      }
+      return trimmedString;    
+  } catch (error) {
+      return address;
+  }
+}
+function filterTxnForgraph(transactions) {
+  const tickets_sold = [0,0,0,0,0,0,0];
+  const revenue = [0,0,0,0,0,0,0];
+  try {
+    if(transactions.length < 1)
+        throw new Error("NOT_ENOUGH_TXNS");
+    for (let index = 0; index < transactions.length; index++) {
+      const eachTransaction = transactions[index];
+      const date = new Date(eachTransaction.timestamp);
+      if(date.getHours < 10)
+      {
+        tickets_sold[0] += eachTransaction.actions[0].info.tickets;
+        revenue[0] += ((eachTransaction.actions[0].info.tickets ?? 0) * (eachTransaction.actions[0].info?.ticket_price ?? 1));
+      }
+      else if(date.getHours >= 10 && date.getHours < 12)
+      {
+        tickets_sold[1] += eachTransaction.actions[0].info?.tickets ?? 0;
+        revenue[1] += ((eachTransaction.actions[0].info.tickets ?? 0) * (eachTransaction.actions[0].info?.ticket_price ?? 1));
+      }
+      else if(date.getHours >= 12 && date.getHours < 14)
+      {
+        tickets_sold[2] += eachTransaction.actions[0].info?.tickets ?? 0;
+        revenue[2] += ((eachTransaction.actions[0].info.tickets ?? 0) * (eachTransaction.actions[0].info?.ticket_price ?? 1));
+      }
+      else if(date.getHours >= 14 && date.getHours < 16)
+      {
+        tickets_sold[3] += eachTransaction.actions[0].info?.tickets ?? 0;
+        revenue[3] += ((eachTransaction.actions[0].info.tickets ?? 0) * (eachTransaction.actions[0].info?.ticket_price ?? 1));
+      }
+      else if(date.getHours >= 16 && date.getHours < 18)
+      {
+        tickets_sold[4] += eachTransaction.actions[0].info?.tickets ?? 0;
+        revenue[4] += ((eachTransaction.actions[0].info.tickets ?? 0) * (eachTransaction.actions[0].info?.ticket_price ?? 1));
+      }
+      else if(date.getHours >= 18 && date.getHours < 20)
+      {
+        tickets_sold[5] += eachTransaction.actions[0].info?.tickets ?? 0;
+        revenue[5] += ((eachTransaction.actions[0].info.tickets ?? 0) * (eachTransaction.actions[0].info?.ticket_price ?? 1));
+      }
+      else
+      {
+        tickets_sold[6] += eachTransaction.actions[0].info?.tickets ?? 0;
+        revenue[6] += ((eachTransaction.actions[0].info.tickets ?? 0) * (eachTransaction.actions[0].info?.ticket_price ?? 1));
+      }
+    }
+    return {
+      tickets_sold: tickets_sold,
+      revenue: revenue
+    }
+  } catch (error) {
+    console.log(error.message);
+    return { 
+      tickets_sold: tickets_sold,
+      revenue: revenue
+    }
+  }
+}
 function getDifferenceISO(ISODateInitial, ISODateFinal) {
   var dateInitial = new Date(ISODateInitial);
   var dateFinal = new Date(ISODateFinal);
 
   return dateFinal.getHours() - dateInitial.getHours(); //change to day in production
+}
+function getDifferenceISODay(ISODateInitial, ISODateFinal) {
+  var dateInitial = new Date(ISODateInitial);
+  var dateFinal = new Date(ISODateFinal);
+
+  return dateFinal.getDate() - dateInitial.getDate(); //change to day in production
+}
+async function getLastTransactionOfTheDay(address,ISODate)
+{
+  try {
+    if(!address || !ISODate)
+      throw new Error("NO_ADDR_DATE");
+    var lastTxnOfTheDay = "";
+    var transactionFetchComplete = false;
+    var oldestTxnSignature = "";
+    while (!transactionFetchComplete) {
+      var paramsToGetTransactions = {
+        network: Network.Mainnet,
+        account: address,
+        txNum: 10,
+      };
+      if (oldestTxnSignature !== "")
+        paramsToGetTransactions = {
+          ...paramsToGetTransactions,
+          beforeTxSignature: oldestTxnSignature,
+        };
+
+      const getTransactions = await shyftClient.transaction.history(
+        paramsToGetTransactions
+      );
+      console.log("calling Get transactions API")
+
+      if (getTransactions.length > 0)
+        oldestTxnSignature =
+          getTransactions[getTransactions.length - 1].signatures[0];
+
+      for (let index = 0; index < getTransactions.length; index++) {
+        const eachTransaction = getTransactions[index];
+        if (getDifferenceISODay(ISODate, eachTransaction.timestamp) < 0) {
+          if(index !== 0)
+            lastTxnOfTheDay = getTransactions[index-1].signatures[0];
+          transactionFetchComplete = true;
+          break;
+        }
+        
+      }
+    }
+    return lastTxnOfTheDay;
+
+  } catch (error) {
+    console.log(error.message);
+    return "";
+  }
 }

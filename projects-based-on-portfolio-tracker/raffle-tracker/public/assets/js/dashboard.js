@@ -104,7 +104,7 @@ $(function () {
     var chart = new ApexCharts(document.querySelector("#chart"), chartall);
       chart.render();
       
-  }, 500);
+  }, 5000);
 }) 
 $(function () {
   // =====================================
