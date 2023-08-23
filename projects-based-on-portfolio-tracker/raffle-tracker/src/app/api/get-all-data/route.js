@@ -41,8 +41,8 @@ async function getAllTransaction(address, network) {
   var calcNextDay = new Date(baseTime);
   calcNextDay.setDate(calcNextDay.getDate() + 1);
   var nextDate = calcNextDay.toISOString();
-  // console.log("Next date for fetching Transactions: ",nextDate);
-  // console.log("Transactions will be fetched for: ",baseTime);
+  console.log("Next date for fetching Transactions: ",nextDate);
+  console.log("Transactions will be fetched for: ",baseTime);
   var transactionFetchComplete = false;
   try {
     const startFetchingTxnsFrom = await getLastTransactionOfTheDay(address,nextDate);
@@ -70,6 +70,11 @@ async function getAllTransaction(address, network) {
       );
       console.log("calling Get transactions API from getall transaction")
       console.log("Transaction received: ", getTransactions.length);
+      if(getTransactions.length === 0)
+      {
+        transactionFetchComplete = true;
+        break;
+      }
       if (getTransactions.length > 0)
         oldestTxnSignature =
           getTransactions[getTransactions.length - 1].signatures[0];
@@ -215,32 +220,33 @@ function filterTxnForgraph(transactions) {
     for (let index = 0; index < transactions.length; index++) {
       const eachTransaction = transactions[index];
       const date = new Date(eachTransaction.timestamp);
-      if(date.getHours < 10)
+      console.log("date for txn ", index, date.getHours())
+      if(date.getHours() < 10)
       {
         tickets_sold[0] += eachTransaction.actions[0].info.tickets;
         revenue[0] += ((eachTransaction.actions[0].info.tickets ?? 0) * (eachTransaction.actions[0].info?.ticket_price ?? 1));
       }
-      else if(date.getHours >= 10 && date.getHours < 12)
+      else if(date.getHours() >= 12 && date.getHours() < 14)
       {
         tickets_sold[1] += eachTransaction.actions[0].info?.tickets ?? 0;
         revenue[1] += ((eachTransaction.actions[0].info.tickets ?? 0) * (eachTransaction.actions[0].info?.ticket_price ?? 1));
       }
-      else if(date.getHours >= 12 && date.getHours < 14)
+      else if(date.getHours() >= 14 && date.getHours() < 16)
       {
         tickets_sold[2] += eachTransaction.actions[0].info?.tickets ?? 0;
         revenue[2] += ((eachTransaction.actions[0].info.tickets ?? 0) * (eachTransaction.actions[0].info?.ticket_price ?? 1));
       }
-      else if(date.getHours >= 14 && date.getHours < 16)
+      else if(date.getHours() >= 16 && date.getHours() < 18)
       {
         tickets_sold[3] += eachTransaction.actions[0].info?.tickets ?? 0;
         revenue[3] += ((eachTransaction.actions[0].info.tickets ?? 0) * (eachTransaction.actions[0].info?.ticket_price ?? 1));
       }
-      else if(date.getHours >= 16 && date.getHours < 18)
+      else if(date.getHours() >= 18 && date.getHours() < 21)
       {
         tickets_sold[4] += eachTransaction.actions[0].info?.tickets ?? 0;
         revenue[4] += ((eachTransaction.actions[0].info.tickets ?? 0) * (eachTransaction.actions[0].info?.ticket_price ?? 1));
       }
-      else if(date.getHours >= 18 && date.getHours < 20)
+      else if(date.getHours() >= 21 && date.getHours() < 22)
       {
         tickets_sold[5] += eachTransaction.actions[0].info?.tickets ?? 0;
         revenue[5] += ((eachTransaction.actions[0].info.tickets ?? 0) * (eachTransaction.actions[0].info?.ticket_price ?? 1));

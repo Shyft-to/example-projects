@@ -1,11 +1,13 @@
 "use client"
 import { useState,useEffect } from "react"
 import "../resources/assets/css/styles.min.css"
-// import ApexCharts from 'apexcharts'
+import ApexCharts from 'apexcharts'
 import axios from "axios";
 
 export default function Home() {
   const [data,setData] = useState(null);
+  const [options,setOptions] = useState(null);
+
   useEffect(() => {
     axios.request({
       url: "/api/get-all-data",
@@ -15,8 +17,104 @@ export default function Home() {
       console.log(res.data);
       setData(res.data);
     })
-    .catch(err => console.log("error,", error.message));
+    .catch(err => console.log("error,", err.message));
   }, [])
+  
+  useEffect(() => {
+    if(data !== null)
+    {
+      setOptions({
+        chart: {
+          type: "bar",
+          height: 345,
+          offsetX: -15,
+          toolbar: { show: true },
+          foreColor: "#adb0bb",
+          fontFamily: 'inherit',
+          sparkline: { enabled: false },
+        },
+        series: [
+          { name: "Tickets Sold", data: data.data_for_graph.tickets_sold },
+          { name: "Amount", data: data.data_for_graph.revenue },
+        ],
+        xaxis: {
+          type: "category",
+          categories: ["10 AM", "12 AM", "2 PM", "4 PM", "6 PM", "8 PM", "10 PM", "12 PM"],
+          labels: {
+            style: { cssClass: "grey--text lighten-2--text fill-color" },
+          },
+        },
+        colors: ["#E33535", "#F4f4f4"],
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            columnWidth: "35%",
+            borderRadius: [6],
+            borderRadiusApplication: 'end',
+            borderRadiusWhenStacked: 'all'
+          },
+        },
+        markers: { size: 0 },
+    
+        dataLabels: {
+          enabled: false,
+        },
+    
+    
+        legend: {
+          show: false,
+        },
+        grid: {
+          borderColor: "rgba(0,0,0,0.1)",
+          strokeDashArray: 3,
+          xaxis: {
+            lines: {
+              show: false,
+            },
+          },
+        },
+        yaxis: {
+          show: true,
+          min: 0,
+          max: 4,
+          tickAmount: 4,
+          labels: {
+            style: {
+              cssClass: "grey--text lighten-2--text fill-color",
+            },
+          },
+        },
+        stroke: {
+          show: true,
+          width: 3,
+          lineCap: "butt",
+          colors: ["transparent"],
+        },
+        tooltip: { theme: "dark" },
+        responsive: [
+          {
+            breakpoint: 600,
+            options: {
+              plotOptions: {
+                bar: {
+                  borderRadius: 3,
+                }
+              },
+            }
+          }
+        ]
+      })
+    }
+  }, [data])
+  
+  useEffect(() => {
+    if(options !== null)
+    {
+      var chart = new ApexCharts(document.querySelector('#chart'), options)
+      chart.render()
+    }
+  }, [options])
+  
   
   return (
     <div className="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6">
@@ -145,7 +243,7 @@ export default function Home() {
                               {
                                 data.formatted_transactions.map((txn) => (
                                   <li class="timeline-item d-flex position-relative overflow-hidden">
-                                    <div class="timeline-time text-light flex-shrink-0 text-end">{new Date(txn.timestamp).getHours()}:{new Date(txn.timestamp).getMinutes()}</div>
+                                    <div class="timeline-time text-light flex-shrink-0 text-end">{new Date(txn.timestamp).getHours()}:{new Date(txn.timestamp).getMinutes()<10?"0"+new Date(txn.timestamp).getMinutes():new Date(txn.timestamp).getMinutes()}</div>
                                     <div class="timeline-badge-wrap d-flex flex-column align-items-center">
                                       <span class="timeline-badge border-2 border border-theme-red flex-shrink-0 my-8"></span>
                                       <span class="timeline-badge-border d-block flex-shrink-0"></span>
@@ -197,9 +295,9 @@ export default function Home() {
                                   <h6 class="fw-semibold mb-0 fs-4">185</h6>
                                 </td>
                               </tr> 
-                              {data.agg_buyers.length > 0 && <>
+                              {data.agg_buyers.buyers.length > 0 && <>
                                 {
-                                  data.agg_buyers.map((buyer,index) => (
+                                  data.agg_buyers.buyers.map((buyer,index) => (
                                     <tr>
                                       <td class="border-bottom-0"><h6 class="fw-semibold mb-0">{index}</h6></td>
                                       <td class="border-bottom-0">
