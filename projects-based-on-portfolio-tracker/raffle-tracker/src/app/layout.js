@@ -12,9 +12,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        <meta charset="utf-8" />
+        <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>This is my page</title>
+        <title>Raffle Dashboard</title>
         <link rel="stylesheet" href="../resources/assets/css/styles.min.css" />
       </head>
       <body className={inter.className} data-bs-theme="dark">

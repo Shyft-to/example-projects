@@ -11,23 +11,26 @@ export default function Home() {
   const [loading,setLoading] = useState("unloaded");
   const [address,setAddress] = useState("");
   const [date,setDate] = useState("");
-  const [network,setNetwork] = useState("mainnet-beta")
 
   const getData = () => {
+    setLoading("loading");
     axios.request({
       url: "/api/get-all-data",
       method: "GET",
       params: {
         address: address,
-        date: date,
-        network: network
+        date: date
       }
     })
     .then(res => {
-      console.log(res.data);
+      setLoading("loaded");
+      //console.log(res.data);
       setData(res.data);
     })
-    .catch(err => console.log("error,", err.message));
+    .catch(err => {
+      console.log("error,", err.message);
+      setLoading("error");
+    });
   }
   
   useEffect(() => {
@@ -86,7 +89,7 @@ export default function Home() {
         yaxis: {
           show: true,
           min: 0,
-          max: 4,
+          max: 12,
           tickAmount: 4,
           labels: {
             style: {
@@ -124,6 +127,23 @@ export default function Home() {
       chart.render()
     }
   }, [options])
+
+  function shortenAddress(address) {
+    try {
+        var trimmedString = "";
+        if (address === "")
+            return "unknown";
+        if (address != null || address.length > 16) {
+            trimmedString = (address.substring(0, 8) + "..." + address.substring(address.length - 5));
+        }
+        else {
+            trimmedString = address ?? "";
+        }
+        return trimmedString;    
+    } catch (error) {
+        return address;
+    }
+  }
   
   
   return (
@@ -131,42 +151,50 @@ export default function Home() {
        <div className="body-wrapper" style={{minHeight: "100vh"}}>
         <div className="container-lg">
           <div className="row pt-4">
-            <div className="col-lg-6">
-              <input type="text" className="form-control" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Enter Raffle Address" />
+            <div className="col-12 col-lg-8">
+              <input type="text" className="form-control rounded-5 text-light" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Enter Raffle Address" />
             </div>
-            <div className="col-lg-2">
-              <input type="date" className="form-control" onChange={(e) => {
+            <div className="col-12 col-lg-2">
+              <input type="date" className="form-control rounded-5 text-light" onChange={(e) => {
                 setDate(e.target.value);
                 console.log(e.target.value);
               }} placeholder="Date On which raffle starts"/>
             </div>
-            <div className="col-lg-2">
-              <select className="form-select" onChange={(e) => setNetwork(e.target.value)}>
-                <option>Mainnet-beta</option>
-                <option>devnet</option>
-              </select>
-            </div>
-            <div className="col-lg-2">
-              <button className="btn btn-warning" onClick={getData}>Get Info</button>
+            <div className="col-12 col-lg-2">
+              <button className="btn theme-red-bg text-light rounded-5 border-light w-100" onClick={getData}>Get Details</button>
             </div>
           </div>
-        {(data !== null) && <>
-          <div className="row pt-4">
+          
+        {(loading === "unloaded") && <div className="mt-4 pt-4 text-center fw-semibold w-100">Please enter Raffle address and Date for getting ticket details</div>}
+        {(loading === "error") && <div className="mt-4 pt-4 text-center text-danger fw-semibold w-100">Some error Occured</div>}
+        {(loading === "loading") && 
+        <div className="mt-4 pt-4 text-center w-100 mx-auto">
+          <div className="lds-heart">
+            <div></div>
+          </div>
+        </div>}
+        {(loading === "loaded") && (data !== null) && <div>
+          <div className="row pt-5">
             <div className="col-lg-12">
                 <div className="card">
                   <div className="card-body py-3">
                     <div className="row align-items-start">
                       <div className="col-8">
                         <h5 className="card-title mb-2 fw-semibold">Raffle Address </h5>
-                        <h3 className="fw-semibold mb-0 theme-yellow-text">C9U8m5PPuhARXBpPScJhKAUa4XRqHrS4hknkxXPQobBB</h3>
+                        <h3 className="fw-semibold mb-0 theme-red-text">{address}</h3>
                       </div>
                       <div className="col-4">
-                        <div className="d-flex justify-content-end">
+                        <div className="d-flex flex-column justify-content-end align-items-end">
                           <div
-                            className="text-white theme-red-bg rounded rounded-5 py-1 px-3 d-flex align-items-center justify-content-center">
-                              Mainnet-beta
+                            className="theme-yellow-text border border-2 border-light rounded rounded-5 py-1 px-3 d-flex align-items-center justify-content-center w-50">
+                              mainnet-beta
+                          </div>
+                          <div
+                            className="theme-yellow-text border border-2 border-light rounded rounded-5 py-1 px-3 d-flex align-items-center justify-content-center mt-1 w-50">
+                              {date}
                           </div>
                         </div>
+                        
                       </div>
                     </div>
                   </div>
@@ -197,12 +225,16 @@ export default function Home() {
                       <h5 className="card-title mb-9 fw-semibold">Total Tickets Sold</h5>
                       <div className="row align-items-center">
                         <div className="col-8">
-                          <h1 className="fw-semibold mb-1 theme-yellow-text">
+                          <h1 className="fw-semibold mb-1 theme-red-text">
                             {data.agg_data.total_tickets_sold}
                           </h1>
                         </div>
                         <div className="col-4">
-                          <div className="d-flex justify-content-center">
+                          <div className="d-flex justify-content-end">
+                            <div
+                              className="theme-yellow-text theme-border-white rounded-circle p-6 d-flex align-items-center justify-content-center" style={{border:"2px solid #FBB901"}}>
+                              <i className="ti ti-chart-bar fs-6"></i>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -215,12 +247,12 @@ export default function Home() {
                       <div className="row alig n-items-start">
                         <div className="col-8">
                           <h5 className="card-title mb-9 fw-semibold">Total Earnings</h5>
-                          <h2 className="fw-semibold mb-3 theme-yellow-text">{data.agg_data.total_amount_sold.toFixed(2)} <small style={{fontSize: "18px"}}>SOL</small></h2>
+                          <h2 className="fw-semibold mb-3 theme-red-text">{data.agg_data.total_amount_sold.toFixed(2)} <small style={{fontSize: "18px"}}>SOL</small></h2>
                         </div>
                         <div className="col-4">
                           <div className="d-flex justify-content-end">
                             <div
-                              className="text-white bg-secondary rounded-circle p-6 d-flex align-items-center justify-content-center">
+                              className="theme-yellow-text theme-border-white rounded-circle p-6 d-flex align-items-center justify-content-center" style={{border:"2px solid #FBB901"}}>
                               <i className="ti ti-currency-dollar fs-6"></i>
                             </div>
                           </div>
@@ -235,13 +267,13 @@ export default function Home() {
                       <div className="row alig n-items-start">
                         <div className="col-8">
                           <h5 className="card-title mb-9 fw-semibold"> Each Ticket Price </h5>
-                          <h2 className="fw-semibold mb-3 theme-yellow-text">{data.agg_data.each_ticket_price} <small style={{fontSize: "18px"}}>SOL</small></h2>
+                          <h2 className="fw-semibold mb-3 theme-red-text">{data.agg_data.each_ticket_price} <small style={{fontSize: "18px"}}>SOL</small></h2>
                         </div>
                         <div className="col-4">
                           <div className="d-flex justify-content-end">
                             <div
-                              className="text-white bg-secondary rounded-circle p-6 d-flex align-items-center justify-content-center">
-                              <i className="ti ti-currency-dollar fs-6"></i>
+                              className="theme-yellow-text theme-border-white rounded-circle p-6 d-flex align-items-center justify-content-center" style={{border:"2px solid #FBB901"}}>
+                              <i className="ti ti-ticket fs-6"></i>
                             </div>
                           </div>
                         </div>
@@ -301,45 +333,31 @@ export default function Home() {
                                   <h6 class="fw-semibold mb-0">No.</h6>
                                 </th>
                                 <th class="border-bottom-0">
-                                  <h6 class="fw-semibold mb-0">Buyer</h6>
+                                  <h6 class="fw-semibold mb-0 text-center">Buyer</h6>
                                 </th>
                                 <th class="border-bottom-0">
-                                  <h6 class="fw-semibold mb-0">Each Ticket</h6>
+                                  <h6 class="fw-semibold mb-0 text-center">Each Ticket</h6>
                                 </th>
                                 <th class="border-bottom-0">
-                                  <h6 class="fw-semibold mb-0">Total Price</h6>
+                                  <h6 class="fw-semibold mb-0 text-center">Total Price</h6>
                                 </th>
                               </tr>
                             </thead>
                             <tbody>
-                              <tr>
-                                <td class="border-bottom-0"><h6 class="fw-semibold mb-0">1</h6></td>
-                                <td class="border-bottom-0">
-                                    <h6 class="fw-semibold mb-1">wtf.sol</h6>
-                                    <span class="fw-normal">9ax2....xdf</span>                          
-                                </td>
-                                <td class="border-bottom-0">
-                                  <p class="mb-0 fw-normal">12</p>
-                                </td>
-                                
-                                <td class="border-bottom-0">
-                                  <h6 class="fw-semibold mb-0 fs-4">185</h6>
-                                </td>
-                              </tr> 
                               {data.agg_buyers.buyers.length > 0 && <>
                                 {
                                   data.agg_buyers.buyers.map((buyer,index) => (
                                     <tr>
                                       <td class="border-bottom-0"><h6 class="fw-semibold mb-0">{index}</h6></td>
                                       <td class="border-bottom-0">
-                                          <h6 class="fw-semibold mb-1">{buyer.buyer}</h6>
+                                          <h6 class="fw-semibold mb-1 text-center">{shortenAddress(buyer.buyer)}</h6>
                                           {/* <span class="fw-normal">Project Manager</span>                           */}
                                       </td>
                                       <td class="border-bottom-0">
-                                        <h6 class="fw-semibold mb-0 fs-4">{buyer.tickets_bought}</h6>
+                                        <h6 class="fw-semibold mb-0 fs-4 text-center">{buyer.tickets_bought}</h6>
                                       </td>
-                                      <td class="border-bottom-0">
-                                        <div class="d-flex align-items-center gap-2">
+                                      <td class="border-bottom-0 text-center">
+                                        <div class="text-center">
                                           <span class="badge theme-red-bg rounded-3 fw-semibold">{buyer.tickets_bought * data.agg_data.each_ticket_price}</span>
                                         </div>
                                       </td>
@@ -372,7 +390,7 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-            </>}
+            </div>}
         </div>
       </div>
     </div>

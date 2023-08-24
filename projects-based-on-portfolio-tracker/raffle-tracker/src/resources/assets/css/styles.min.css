@@ -16592,3 +16592,7 @@ ul {
 .theme-red-bg {
     background-color: var(--bs-our-theme-primary);
 }
+.theme-border-white {
+    border-color: #f4f4f4 !important;
+    border-width: 2px;
+}

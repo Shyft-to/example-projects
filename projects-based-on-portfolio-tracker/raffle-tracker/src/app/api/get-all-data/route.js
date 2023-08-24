@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 const shyftClient = new ShyftSdk({
   apiKey: process.env.API_KEY,
-  network: Network.Devnet,
+  network: Network.Mainnet,
 });
 
 export const GET = async (req, res) => {
@@ -11,11 +11,21 @@ export const GET = async (req, res) => {
     const url = new URL(req.url);
     const address = url.searchParams.get("address");
     const date = url.searchParams.get("date");
-    const network = url.searchParams.get("network");
-    console.log(address+"/"+date+"/"+network);
+    // const network = url.searchParams.get("network");
+    // console.log(address+"/"+date+"/"+network);
+
+    if(!address)
+      throw new Error("INVALID_ADDRESS");
+    if(date === "")
+      throw new Error("INVALID_DATE");
     
-    const transactions = await getAllTransaction(process.env.RAFFLE_ADDRESS, "devnet")
-    const getAggData = calculateTotalSales(transactions);
+    const formattedDate = formatDateToISO(date);
+    
+    if(formattedDate === "")
+      throw new Error("INVALID_DATE");
+
+    const transactions = await getAllTransaction(address,formattedDate)
+    const getAggData = calculateTotalSales(transactions,address);
     const getBuyers = countUniqueBuyers(transactions);
     const formattedTxns = formatRecentTransactions(transactions);
     const graphData = filterTxnForgraph(transactions);
@@ -40,10 +50,10 @@ export const GET = async (req, res) => {
   }
 };
 
-async function getAllTransaction(address, network) {
+async function getAllTransaction(address,baseTime) {
   let transactions = [];
   let oldestTxnSignature = "";
-  const baseTime = process.env.BASE_TIME ?? "2023-08-22T00:00:00.000Z";
+  // const baseTime = process.env.BASE_TIME ?? "2023-08-22T00:00:00.000Z";
   var calcNextDay = new Date(baseTime);
   calcNextDay.setDate(calcNextDay.getDate() + 1);
   var nextDate = calcNextDay.toISOString();
@@ -52,7 +62,6 @@ async function getAllTransaction(address, network) {
   var transactionFetchComplete = false;
   try {
     const startFetchingTxnsFrom = await getLastTransactionOfTheDay(address,nextDate);
-    console.log("start Ftech: ",startFetchingTxnsFrom);
     while (!transactionFetchComplete) {
       var paramsToGetTransactions = {
         network: Network.Mainnet,
@@ -101,7 +110,7 @@ async function getAllTransaction(address, network) {
   }
   return transactions;
 }
-function calculateTotalSales(transactions) {
+function calculateTotalSales(transactions,address) {
     try {
         var totalTickets = 0;
         var totalPrice = 0;
@@ -111,7 +120,7 @@ function calculateTotalSales(transactions) {
         
         for (let index = 0; index < transactions.length; index++) {
             const eachTransaction = transactions[index];
-            if(eachTransaction.actions[0].info.raffle_address === process.env.RAFFLE_ADDRESS)
+            if(eachTransaction.actions[0].info.raffle_address === address)
             {
                 console.log("TransactionScanned -", index)
                 if(eachTicketPrice === 0)
@@ -285,7 +294,24 @@ function getDifferenceISODay(ISODateInitial, ISODateFinal) {
   var dateInitial = new Date(ISODateInitial);
   var dateFinal = new Date(ISODateFinal);
 
-  return dateFinal.getDate() - dateInitial.getDate(); //change to day in production
+  return dateFinal.getDate() - dateInitial.getDate(); 
+}
+function formatDateToISO(dateString)
+{
+  try {
+    if(typeof dateString !== "string" || dateString === "")
+      throw new Error("INVALID_DATE");
+
+    const dataArray = dateString.split("/")
+    const formattedDate = dataArray[1]+"-"+dataArray[2]+"-"+dataArray[0];
+
+    const isoDate = new Date(formattedDate).toISOString();
+
+    return isoDate;
+  } catch (error) {
+    console.log(error.message);
+    return "";
+  }
 }
 async function getLastTransactionOfTheDay(address,ISODate)
 {
