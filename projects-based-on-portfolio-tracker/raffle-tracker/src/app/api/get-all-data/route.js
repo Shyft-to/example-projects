@@ -8,6 +8,12 @@ const shyftClient = new ShyftSdk({
 
 export const GET = async (req, res) => {
   try {
+    const url = new URL(req.url);
+    const address = url.searchParams.get("address");
+    const date = url.searchParams.get("date");
+    const network = url.searchParams.get("network");
+    console.log(address+"/"+date+"/"+network);
+    
     const transactions = await getAllTransaction(process.env.RAFFLE_ADDRESS, "devnet")
     const getAggData = calculateTotalSales(transactions);
     const getBuyers = countUniqueBuyers(transactions);

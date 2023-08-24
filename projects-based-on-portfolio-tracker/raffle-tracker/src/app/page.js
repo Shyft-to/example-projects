@@ -8,17 +8,27 @@ export default function Home() {
   const [data,setData] = useState(null);
   const [options,setOptions] = useState(null);
 
-  useEffect(() => {
+  const [loading,setLoading] = useState("unloaded");
+  const [address,setAddress] = useState("");
+  const [date,setDate] = useState("");
+  const [network,setNetwork] = useState("mainnet-beta")
+
+  const getData = () => {
     axios.request({
       url: "/api/get-all-data",
-      method: "GET"
+      method: "GET",
+      params: {
+        address: address,
+        date: date,
+        network: network
+      }
     })
     .then(res => {
       console.log(res.data);
       setData(res.data);
     })
     .catch(err => console.log("error,", err.message));
-  }, [])
+  }
   
   useEffect(() => {
     if(data !== null)
@@ -118,8 +128,29 @@ export default function Home() {
   
   return (
     <div className="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6">
-      {(data !== null) && <div className="body-wrapper" style={{minHeight: "100vh"}}>
+       <div className="body-wrapper" style={{minHeight: "100vh"}}>
         <div className="container-lg">
+          <div className="row pt-4">
+            <div className="col-lg-6">
+              <input type="text" className="form-control" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Enter Raffle Address" />
+            </div>
+            <div className="col-lg-2">
+              <input type="date" className="form-control" onChange={(e) => {
+                setDate(e.target.value);
+                console.log(e.target.value);
+              }} placeholder="Date On which raffle starts"/>
+            </div>
+            <div className="col-lg-2">
+              <select className="form-select" onChange={(e) => setNetwork(e.target.value)}>
+                <option>Mainnet-beta</option>
+                <option>devnet</option>
+              </select>
+            </div>
+            <div className="col-lg-2">
+              <button className="btn btn-warning" onClick={getData}>Get Info</button>
+            </div>
+          </div>
+        {(data !== null) && <>
           <div className="row pt-4">
             <div className="col-lg-12">
                 <div className="card">
@@ -341,9 +372,9 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-
+            </>}
         </div>
-      </div>}
+      </div>
     </div>
   )
 }
