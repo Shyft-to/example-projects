@@ -241,27 +241,27 @@ function filterTxnForgraph(transactions) {
         tickets_sold[0] += eachTransaction.actions[0].info.tickets;
         revenue[0] += ((eachTransaction.actions[0].info.tickets ?? 0) * (eachTransaction.actions[0].info?.ticket_price ?? 1));
       }
-      else if(date.getHours() >= 12 && date.getHours() < 14)
+      else if(date.getHours() >= 10 && date.getHours() < 12)
       {
         tickets_sold[1] += eachTransaction.actions[0].info?.tickets ?? 0;
         revenue[1] += ((eachTransaction.actions[0].info.tickets ?? 0) * (eachTransaction.actions[0].info?.ticket_price ?? 1));
       }
-      else if(date.getHours() >= 14 && date.getHours() < 16)
+      else if(date.getHours() >= 12 && date.getHours() < 14)
       {
         tickets_sold[2] += eachTransaction.actions[0].info?.tickets ?? 0;
         revenue[2] += ((eachTransaction.actions[0].info.tickets ?? 0) * (eachTransaction.actions[0].info?.ticket_price ?? 1));
       }
-      else if(date.getHours() >= 16 && date.getHours() < 18)
+      else if(date.getHours() >= 14 && date.getHours() < 16)
       {
         tickets_sold[3] += eachTransaction.actions[0].info?.tickets ?? 0;
         revenue[3] += ((eachTransaction.actions[0].info.tickets ?? 0) * (eachTransaction.actions[0].info?.ticket_price ?? 1));
       }
-      else if(date.getHours() >= 18 && date.getHours() < 21)
+      else if(date.getHours() >= 16 && date.getHours() < 20)
       {
         tickets_sold[4] += eachTransaction.actions[0].info?.tickets ?? 0;
         revenue[4] += ((eachTransaction.actions[0].info.tickets ?? 0) * (eachTransaction.actions[0].info?.ticket_price ?? 1));
       }
-      else if(date.getHours() >= 21 && date.getHours() < 22)
+      else if(date.getHours() >= 20 && date.getHours() < 22)
       {
         tickets_sold[5] += eachTransaction.actions[0].info?.tickets ?? 0;
         revenue[5] += ((eachTransaction.actions[0].info.tickets ?? 0) * (eachTransaction.actions[0].info?.ticket_price ?? 1));
