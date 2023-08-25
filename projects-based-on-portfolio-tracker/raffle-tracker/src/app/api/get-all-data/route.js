@@ -177,7 +177,7 @@ function countUniqueBuyers(transactions) {
         
         
         return {
-            buyers: countBuyerArray
+            buyers: countBuyerArray.sort((a,b) => b.tickets_bought - a.tickets_bought)
         }
         
     } catch (error) {

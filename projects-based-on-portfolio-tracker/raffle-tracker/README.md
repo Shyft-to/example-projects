@@ -18,17 +18,12 @@ You can start editing the page by modifying `app/page.js`. The page auto-updates
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-## Learn More
+## IMPORTANT - THE .env.local file
 
-To learn more about Next.js, take a look at the following resources:
+This project calculates the number of tickets sold for a FFF raffle in one day using SHYFT APIs. In order to run to run this project create an .env.local file, and add one variable called
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+`API_KEY=`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+The value for this will be your SHYFT API key which you shall obtain from SHYFT Website [Here.](http://shyft.to/get-api-key)
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+View our detailed documentation [here.](http://docs.shyft.to/)

@@ -3,6 +3,7 @@ import { useState,useEffect } from "react"
 import "../resources/assets/css/styles.min.css"
 import ApexCharts from 'apexcharts'
 import axios from "axios";
+import {motion} from "framer-motion";
 
 export default function Home() {
   const [data,setData] = useState(null);
@@ -176,7 +177,20 @@ export default function Home() {
         {(loading === "loaded") && (data !== null) && <div>
           <div className="row pt-5">
             <div className="col-lg-12">
-                <div className="card">
+                <motion.div className="card" 
+                  initial={{ opacity: 0, y: 20 }} 
+                  whileInView={{ opacity: 1, y: 0 }} 
+                  transition={{
+                    duration: 0.1,
+                    delay: 0.1,
+                    y: {
+                      type: "spring",
+                      damping: 5,
+                      stiffness: 50,
+                      restDelta: 0.001
+                    }
+                  }}
+                >
                   <div className="card-body py-3">
                     <div className="row align-items-start">
                       <div className="col-8">
@@ -198,12 +212,25 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               </div>
           </div>
           <div className="row">
             <div className="col-lg-8 d-flex align-items-strech">
-              <div className="card w-100">
+              <motion.div className="card w-100"
+                initial={{ opacity: 0, y: 20 }} 
+                whileInView={{ opacity: 1, y: 0 }} 
+                transition={{
+                  duration: 0.1,
+                  delay: 0.3,
+                  y: {
+                    type: "spring",
+                    damping: 5,
+                    stiffness: 50,
+                    restDelta: 0.001
+                  }
+                }}
+              >
                 <div className="card-body">
                   <div className="d-sm-flex d-block align-items-center justify-content-between mb-9">
                     <div className="mb-3 mb-sm-0">
@@ -215,12 +242,25 @@ export default function Home() {
                   </div>
                   <div id="chart"></div>
                 </div>
-              </div>
+              </motion.div>
             </div>
             <div className="col-lg-4">
               <div className="row">
                 <div className="col-lg-12">
-                  <div className="card overflow-hidden">
+                  <motion.div className="card overflow-hidden"
+                    initial={{ opacity: 0, y: 20 }} 
+                    whileInView={{ opacity: 1, y: 0 }} 
+                    transition={{
+                      duration: 0.1,
+                      delay: 0.4,
+                      y: {
+                        type: "spring",
+                        damping: 5,
+                        stiffness: 50,
+                        restDelta: 0.001
+                      }
+                    }}
+                  >
                     <div className="card-body p-4">
                       <h5 className="card-title mb-9 fw-semibold">Total Tickets Sold</h5>
                       <div className="row align-items-center">
@@ -232,17 +272,30 @@ export default function Home() {
                         <div className="col-4">
                           <div className="d-flex justify-content-end">
                             <div
-                              className="theme-yellow-text theme-border-white rounded-circle p-6 d-flex align-items-center justify-content-center" style={{border:"2px solid #FBB901"}}>
+                              className="theme-yellow-text theme-border-white rounded-circle p-6 d-flex align-items-center justify-content-center" style={{border:"2px solid #FBB901", marginTop: "-50px"}}>
                               <i className="ti ti-chart-bar fs-6"></i>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 </div>
                 <div className="col-lg-12">
-                  <div className="card">
+                  <motion.div className="card"
+                    initial={{ opacity: 0, y: 20 }} 
+                    whileInView={{ opacity: 1, y: 0 }} 
+                    transition={{
+                      duration: 0.1,
+                      delay: 0.5,
+                      y: {
+                        type: "spring",
+                        damping: 5,
+                        stiffness: 50,
+                        restDelta: 0.001
+                      }
+                    }}
+                  >
                     <div className="card-body">
                       <div className="row alig n-items-start">
                         <div className="col-8">
@@ -259,10 +312,23 @@ export default function Home() {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 </div>
                 <div className="col-lg-12">
-                  <div className="card">
+                  <motion.div className="card overflow-hidden"
+                    initial={{ opacity: 0, y: 20 }} 
+                    whileInView={{ opacity: 1, y: 0 }} 
+                    transition={{
+                      duration: 0.1,
+                      delay: 0.6,
+                      y: {
+                        type: "spring",
+                        damping: 5,
+                        stiffness: 50,
+                        restDelta: 0.001
+                      }
+                    }}
+                  >
                     <div className="card-body">
                       <div className="row alig n-items-start">
                         <div className="col-8">
@@ -279,28 +345,32 @@ export default function Home() {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 </div>
               </div>
-              
             </div>
           </div>
           <div class="row">
                   <div class="col-lg-4 d-flex align-items-stretch">
-                    <div class="card w-100">
+                    <motion.div class="card w-100"
+                      initial={{ opacity: 0, y: 20 }} 
+                      whileInView={{ opacity: 1, y: 0 }} 
+                      transition={{
+                        duration: 0.1,
+                        delay: 0.7,
+                        y: {
+                          type: "spring",
+                          damping: 5,
+                          stiffness: 50,
+                          restDelta: 0.001
+                        }
+                      }}
+                    >
                       <div class="card-body p-4">
                         <div class="mb-4">
                           <h5 class="card-title fw-semibold">Recent Transactions</h5>
                         </div>
                         <ul class="timeline-widget mb-0 position-relative mb-n5">
-                          {/* <li class="timeline-item d-flex position-relative overflow-hidden">
-                            <div class="timeline-time text-light flex-shrink-0 text-end">09:30</div>
-                            <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                              <span class="timeline-badge border-2 border border-theme-red flex-shrink-0 my-8"></span>
-                              <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                            </div>
-                            <div class="timeline-desc fs-3 text-light mt-n1">nsbbx..uys bought a total of 8 Tickets</div>
-                          </li> */}
                           {
                             data.formatted_transactions.length > 0 && <>
                               {
@@ -319,10 +389,23 @@ export default function Home() {
                           }
                         </ul>
                       </div>
-                    </div>
+                    </motion.div>
                   </div>
                   <div class="col-lg-8 d-flex align-items-stretch">
-                    <div class="card w-100">
+                    <motion.div class="card w-100"
+                      initial={{ opacity: 0, y: 20 }} 
+                      whileInView={{ opacity: 1, y: 0 }} 
+                      transition={{
+                        duration: 0.1,
+                        delay: 0.9,
+                        y: {
+                          type: "spring",
+                          damping: 5,
+                          stiffness: 50,
+                          restDelta: 0.001
+                        }
+                      }}
+                    >
                       <div class="card-body p-4">
                         <h5 class="card-title fw-semibold mb-4">Top Buyers</h5>
                         <div class="table-responsive">
@@ -364,30 +447,12 @@ export default function Home() {
                                     </tr>
                                   ))}
                                 </>
-                              }
-                              {/* <tr>
-                                <td class="border-bottom-0"><h6 class="fw-semibold mb-0">3</h6></td>
-                                <td class="border-bottom-0">
-                                    <h6 class="fw-semibold mb-1">Christopher Jamil</h6>
-                                    <span class="fw-normal">Project Manager</span>                          
-                                </td>
-                                <td class="border-bottom-0">
-                                  <p class="mb-0 fw-normal">MedicalPro WP Theme</p>
-                                </td>
-                                <td class="border-bottom-0">
-                                  <div class="d-flex align-items-center gap-2">
-                                    <span class="badge bg-danger rounded-3 fw-semibold">High</span>
-                                  </div>
-                                </td>
-                                <td class="border-bottom-0">
-                                  <h6 class="fw-semibold mb-0 fs-4">$12.8k</h6>
-                                </td>
-                              </tr>       */}                      
+                              }                     
                             </tbody>
                           </table>
                         </div>
                       </div>
-                    </div>
+                    </motion.div>
                   </div>
                 </div>
             </div>}
