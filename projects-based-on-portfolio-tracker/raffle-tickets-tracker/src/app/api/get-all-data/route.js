@@ -41,7 +41,7 @@ export const GET = async (req, res) => {
 async function getAllTransaction(address) {
   let transactions = [];
   let oldestTxnSignature = "";
-
+  console.log("So, we are fetching details of RaFFFle Address: ",address)
   var transactionFetchComplete = false;
   try {
     while (!transactionFetchComplete) {
@@ -94,7 +94,7 @@ function calculateTotalSales(transactions, address) {
     for (let index = 0; index < transactions.length; index++) {
       const eachTransaction = transactions[index];
       if (eachTransaction.actions[0].info.raffle_address === address) {
-        console.log("TransactionScanned -", index);
+        console.log("current txn being scanned -", index);
         if (eachTicketPrice === 0)
           eachTicketPrice = eachTransaction.actions[0].info.ticket_price;
 
@@ -201,7 +201,7 @@ function filterTxnForgraph(transactions) {
     for (let index = 0; index < transactions.length; index++) {
       const eachTransaction = transactions[index];
       const date = new Date(eachTransaction.timestamp);
-      console.log("date for txn ", index, date.getHours());
+      // console.log("date for txn ", index, date.getHours());
       if (date.getHours() < 10) {
         tickets_sold[0] += eachTransaction.actions[0].info.tickets;
         revenue[0] +=

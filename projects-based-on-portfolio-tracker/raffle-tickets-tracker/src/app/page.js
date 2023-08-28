@@ -227,8 +227,8 @@ export default function Home() {
                           </h3>
                         </div>
                         <div className="col-4">
-                          <div className="d-flex flex-column justify-content-end">
-                            <div className="theme-yellow-text border border-2 border-light rounded rounded-5 py-1 px-3 d-flex align-items-center justify-content-center">
+                          <div className="d-flex justify-content-end">
+                            <div className="theme-yellow-text border border-2 border-light rounded rounded-5 py-1 px-3 d-flex align-items-center justify-content-center w-50 text-bold">
                               mainnet-beta
                             </div>
                           </div>
