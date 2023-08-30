@@ -16,16 +16,17 @@ export default function Home() {
     setLoading("loading");
     axios
       .request({
-        url: "/api/get-all-data",
+        url: "/api/get-voting-details",
         method: "GET",
         params: {
-          address: address,
+          proposal: address,
         },
       })
       .then((res) => {
-        setLoading("loaded");
+        //setLoading("loaded");
         //console.log(res.data);
-        setData(res.data);
+        // setData(res.data);
+        console.log(res.data);
       })
       .catch((err) => {
         console.log("error,", err.message);
