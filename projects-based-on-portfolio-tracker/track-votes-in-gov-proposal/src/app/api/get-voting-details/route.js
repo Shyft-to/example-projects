@@ -10,11 +10,13 @@ export const GET = async (req, res) => {
 
     const transactions = await getProposalTransactions(proposal_address, "mainnet-beta");
     const allVotesData = getVotes(transactions.transactions);
+    const miscData = await getMiscData(transactions.transactions[0].actions[0]);
 
     return NextResponse.json({
       success: true,
       transactions: transactions,
-      votes_data: allVotesData
+      votes_data: allVotesData,
+      misc_data: miscData 
     });
   } catch (error) {
     console.log(error.message);
@@ -87,7 +89,6 @@ async function getProposalTransactions(address, network) {
         }
         if(eachTransaction.type === "CAST_VOTE") {
           castVoteTransactions.push(eachTransaction);
-          
         }
         
       }
@@ -138,6 +139,7 @@ function getVotes(transactions) {
       approved: approved,
       disapproved: disapproved,
       total_votes: totalVotes,
+      vote_map: [approved,disapproved],
       motion_passed: approved > disapproved
     }
   } catch (error) {
@@ -147,6 +149,7 @@ function getVotes(transactions) {
       approved: 0,
       disapproved: 0,
       total_votes: 0,
+      vote_map: [0,0],
       motion_passed: false
     }
   }

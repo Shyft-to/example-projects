@@ -1,13 +1,14 @@
 "use client";
 import { useState, useEffect } from "react";
 import "../resources/assets/css/styles.min.css";
-import ApexCharts from "apexcharts";
+// import ApexCharts from "apexcharts";
+import Chart from 'react-apexcharts'
 import axios from "axios";
 import { motion } from "framer-motion";
 
 export default function Home() {
   const [data, setData] = useState(null);
-  const [options, setOptions] = useState(null);
+  // const [options, setOptions] = useState(null);
 
   const [loading, setLoading] = useState("unloaded");
   const [address, setAddress] = useState("");
@@ -23,116 +24,62 @@ export default function Home() {
         },
       })
       .then((res) => {
-        //setLoading("loaded");
-        //console.log(res.data);
-        // setData(res.data);
+        setLoading("loaded");
         console.log(res.data);
+        setData(res.data);
       })
       .catch((err) => {
         console.log("error,", err.message);
         setLoading("error");
       });
   };
-
-  useEffect(() => {
-    if (data !== null) {
-      setOptions({
+  const options = {
+    chart: {
+      width: 380,
+      type: 'pie',
+    },
+    labels: ['Yes', 'No'],
+    responsive: [{
+      breakpoint: 480,
+      options: {
         chart: {
-          type: "bar",
-          height: 345,
-          offsetX: -15,
-          toolbar: { show: true },
-          foreColor: "#adb0bb",
-          fontFamily: "inherit",
-          sparkline: { enabled: false },
+          width: 200
         },
-        series: [
-          { name: "Tickets Sold", data: data.data_for_graph.tickets_sold },
-          { name: "Amount", data: data.data_for_graph.revenue },
-        ],
-        xaxis: {
-          type: "category",
-          categories: [
-            "10 AM",
-            "12 AM",
-            "2 PM",
-            "4 PM",
-            "6 PM",
-            "8 PM",
-            "10 PM",
-          ],
-          labels: {
-            style: { cssClass: "grey--text lighten-2--text fill-color" },
-          },
-        },
-        colors: ["#E33535", "#F4f4f4"],
-        plotOptions: {
-          bar: {
-            horizontal: false,
-            columnWidth: "35%",
-            borderRadius: [6],
-            borderRadiusApplication: "end",
-            borderRadiusWhenStacked: "all",
-          },
-        },
-        markers: { size: 0 },
-
-        dataLabels: {
-          enabled: false,
-        },
-
         legend: {
-          show: false,
-        },
-        grid: {
-          borderColor: "rgba(0,0,0,0.1)",
-          strokeDashArray: 3,
-          xaxis: {
-            lines: {
-              show: false,
-            },
-          },
-        },
-        yaxis: {
-          show: true,
-          min: 0,
-          max: 12,
-          tickAmount: 4,
-          labels: {
-            style: {
-              cssClass: "grey--text lighten-2--text fill-color",
-            },
-          },
-        },
-        stroke: {
-          show: true,
-          width: 3,
-          lineCap: "butt",
-          colors: ["transparent"],
-        },
-        tooltip: { theme: "dark" },
-        responsive: [
-          {
-            breakpoint: 600,
-            options: {
-              plotOptions: {
-                bar: {
-                  borderRadius: 3,
-                },
-              },
-            },
-          },
-        ],
-      });
-    }
-  }, [data]);
+          position: 'bottom'
+        }
+      }
+    }]
+  };
+  // useEffect(() => {
+  //   if (data !== null) {
+  //     setOptions({
+  //         chart: {
+  //           width: 380,
+  //           type: 'pie',
+  //         },
+  //         labels: ['Yes', 'No'],
+  //         responsive: [{
+  //           breakpoint: 480,
+  //           options: {
+  //             chart: {
+  //               width: 200
+  //             },
+  //             legend: {
+  //               position: 'bottom'
+  //             }
+  //           }
+  //         }]
+  //       });
+  //   }
+  // }, [data]);
 
-  useEffect(() => {
-    if (options !== null) {
-      var chart = new ApexCharts(document.querySelector("#chart"), options);
-      chart.render();
-    }
-  }, [options]);
+  // useEffect(() => {
+  //   if (options !== null) {
+  //     var chart = new ApexCharts(document.querySelector("#chart"), options);
+  //     chart.render();
+  //   }
+  // }, [options]);
 
   function shortenAddress(address) {
     try {
@@ -168,7 +115,7 @@ export default function Home() {
                 className="form-control rounded-5 text-light"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
-                placeholder="Enter Raffle Address"
+                placeholder="Enter Proposal Address"
               />
             </div>
             <div className="col-12 col-lg-2">
@@ -183,7 +130,7 @@ export default function Home() {
 
           {loading === "unloaded" && (
             <div className="mt-4 pt-4 text-center fw-semibold w-100">
-              Please enter Raffle address and Date for getting ticket details
+              Please enter proposal address to get details
             </div>
           )}
           {loading === "error" && (
@@ -221,18 +168,26 @@ export default function Home() {
                       <div className="row align-items-start">
                         <div className="col-8">
                           <h5 className="card-title mb-2 fw-semibold">
-                            Raffle Address{" "}
+                            Proposal{" "}
                           </h5>
-                          <h3 className="fw-semibold mb-0 theme-red-text">
-                            {address}
+                          <h3 className="fw-semibold mb-1 theme-red-text">
+                            {data.transactions.proposal_name}
                           </h3>
+                          <small className="mb-0">
+                            {address}
+                          </small>
                         </div>
                         <div className="col-4">
+                          {data.votes_data.motion_passed?<div className="d-flex justify-content-end">
+                            <div className="theme-yellow-text border border-2 border-light rounded rounded-5 py-1 px-3 d-flex align-items-center justify-content-center w-50 text-bold">
+                              Motion Passed
+                            </div>
+                          </div>:
                           <div className="d-flex justify-content-end">
                             <div className="theme-yellow-text border border-2 border-light rounded rounded-5 py-1 px-3 d-flex align-items-center justify-content-center w-50 text-bold">
-                              mainnet-beta
+                              Motion Failed
                             </div>
-                          </div>
+                        </div>}
                         </div>
                       </div>
                     </div>
@@ -260,12 +215,12 @@ export default function Home() {
                       <div className="d-sm-flex d-block align-items-center justify-content-between mb-9">
                         <div className="mb-3 mb-sm-0">
                           <h5 className="card-title fw-semibold">
-                            Tickets Sold over time
+                            {data.transactions.proposal_name}
                           </h5>
                         </div>
                         <div></div>
                       </div>
-                      <div id="chart"></div>
+                      <Chart options={options} series={data.votes_data.vote_map} type="pie" width={500} height={320} />
                     </div>
                   </motion.div>
                 </div>
@@ -288,29 +243,21 @@ export default function Home() {
                         }}
                       >
                         <div className="card-body p-4">
-                          <h5 className="card-title mb-9 fw-semibold">
-                            Total Tickets Sold
-                          </h5>
-                          <div className="row align-items-center">
+                          <div className="row align-items-center mb-2">
                             <div className="col-8">
                               <h1 className="fw-semibold mb-1 theme-red-text">
-                                {data.agg_data.total_tickets_sold}
+                                {data.votes_data.total_votes}
                               </h1>
                             </div>
                             <div className="col-4">
                               <div className="d-flex justify-content-end">
-                                <div
-                                  className="theme-yellow-text theme-border-white rounded-circle p-6 d-flex align-items-center justify-content-center"
-                                  style={{
-                                    border: "2px solid #FBB901",
-                                    marginTop: "-50px",
-                                  }}
-                                >
-                                  <i className="ti ti-chart-bar fs-6"></i>
-                                </div>
+                                
                               </div>
                             </div>
                           </div>
+                          <h5 className="card-title mb-0 fw-semibold">
+                            Total Votes Cast
+                          </h5>
                         </div>
                       </motion.div>
                     </div>
@@ -331,27 +278,21 @@ export default function Home() {
                         }}
                       >
                         <div className="card-body">
-                          <div className="row alig n-items-start">
+                          <div className="row align-items-start mb-1">
                             <div className="col-8">
-                              <h5 className="card-title mb-9 fw-semibold">
-                                Total Earnings
-                              </h5>
-                              <h2 className="fw-semibold mb-3 theme-red-text">
-                                {data.agg_data.total_amount_sold.toFixed(2)}{" "}
-                                <small style={{ fontSize: "18px" }}>SOL</small>
+                              <h2 className="fw-semibold mb-1 theme-red-text">
+                                {data.votes_data.approved}
                               </h2>
                             </div>
                             <div className="col-4">
                               <div className="d-flex justify-content-end">
-                                <div
-                                  className="theme-yellow-text theme-border-white rounded-circle p-6 d-flex align-items-center justify-content-center"
-                                  style={{ border: "2px solid #FBB901" }}
-                                >
-                                  <i className="ti ti-currency-dollar fs-6"></i>
-                                </div>
+                                
                               </div>
                             </div>
                           </div>
+                          <h5 className="card-title mb-0 fw-semibold">
+                            Approved the proposal
+                          </h5>
                         </div>
                       </motion.div>
                     </div>
@@ -372,15 +313,50 @@ export default function Home() {
                         }}
                       >
                         <div className="card-body">
-                          <div className="row alig n-items-start">
+                          <div className="row align-items-start mb-1">
                             <div className="col-8">
-                              <h5 className="card-title mb-9 fw-semibold">
-                                {" "}
-                                Each Ticket Price{" "}
-                              </h5>
-                              <h2 className="fw-semibold mb-3 theme-red-text">
-                                {data.agg_data.each_ticket_price}{" "}
-                                <small style={{ fontSize: "18px" }}>SOL</small>
+                              <h2 className="fw-semibold mb-1 theme-red-text">
+                                {data.votes_data.disapproved}
+                              </h2>
+                            </div>
+                            <div className="col-4">
+                              <div className="d-flex justify-content-end">
+                                
+                              </div>
+                            </div>
+                          </div>
+                          <h5 className="card-title mb-0 fw-semibold">
+                            Refused the proposal
+                          </h5>
+                        </div>
+                      </motion.div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="row">
+                  <div className="col-md-4">
+                      <motion.div
+                        className="card overflow-hidden"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{
+                          duration: 0.1,
+                          delay: 0.6,
+                          y: {
+                            type: "spring",
+                            damping: 5,
+                            stiffness: 50,
+                            restDelta: 0.001,
+                          },
+                        }}
+                      >
+                        <div className="card-body">
+                          <div className="row align-items-start mb-2">
+                            <div className="col-8">
+                              <h2 className="fw-semibold mb-1 theme-yellow-text">
+                                {shortenAddress(data.misc_data.governance_address)}{" "}
                               </h2>
                             </div>
                             <div className="col-4">
@@ -394,147 +370,93 @@ export default function Home() {
                               </div>
                             </div>
                           </div>
+                          <h5 className="card-title mb-0 fw-semibold">
+                            Governance
+                          </h5>
                         </div>
                       </motion.div>
-                    </div>
                   </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-lg-4 d-flex align-items-stretch">
-                  <motion.div
-                    class="card w-100"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{
-                      duration: 0.1,
-                      delay: 0.7,
-                      y: {
-                        type: "spring",
-                        damping: 5,
-                        stiffness: 50,
-                        restDelta: 0.001,
-                      },
-                    }}
-                  >
-                    <div class="card-body p-4">
-                      <div class="mb-4">
-                        <h5 class="card-title fw-semibold">
-                          Recent Transactions
-                        </h5>
-                      </div>
-                      <ul class="timeline-widget mb-0 position-relative mb-n5">
-                        {data.formatted_transactions.length > 0 && (
-                          <>
-                            {data.formatted_transactions.map((txn) => (
-                              <li class="timeline-item d-flex position-relative overflow-hidden">
-                                <div class="timeline-time text-light flex-shrink-0 text-end">
-                                  {new Date(txn.timestamp).getHours()}:
-                                  {new Date(txn.timestamp).getMinutes() < 10
-                                    ? "0" + new Date(txn.timestamp).getMinutes()
-                                    : new Date(txn.timestamp).getMinutes()}
+                  <div className="col-md-4">
+                      <motion.div
+                        className="card overflow-hidden"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{
+                          duration: 0.1,
+                          delay: 0.6,
+                          y: {
+                            type: "spring",
+                            damping: 5,
+                            stiffness: 50,
+                            restDelta: 0.001,
+                          },
+                        }}
+                      >
+                        <div className="card-body">
+                          <div className="row align-items-start mb-2">
+                            <div className="col-8">
+                              <h2 className="fw-semibold mb-1 theme-yellow-text">
+                                {data.misc_data.governing_token_details?.name}{" "}
+                              </h2>
+                            </div>
+                            <div className="col-4">
+                              <div className="d-flex justify-content-end">
+                                <div
+                                  className="theme-yellow-text theme-border-white rounded-circle p-6 d-flex align-items-center justify-content-center"
+                                  style={{ border: "2px solid #FBB901" }}
+                                >
+                                  <i className="ti ti-ticket fs-6"></i>
                                 </div>
-                                <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                                  <span class="timeline-badge border-2 border border-theme-red flex-shrink-0 my-8"></span>
-                                  <span class="timeline-badge-border d-block flex-shrink-0"></span>
+                              </div>
+                            </div>
+                          </div>
+                          <h5 className="card-title mb-0 fw-semibold">
+                            Governing Token
+                          </h5>
+                        </div>
+                      </motion.div>
+                  </div>
+                  <div className="col-md-4">
+                      <motion.div
+                        className="card overflow-hidden"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{
+                          duration: 0.1,
+                          delay: 0.6,
+                          y: {
+                            type: "spring",
+                            damping: 5,
+                            stiffness: 50,
+                            restDelta: 0.001,
+                          },
+                        }}
+                      >
+                        <div className="card-body">
+                          <div className="row align-items-start mb-2">
+                            <div className="col-8">
+                              <h2 className="fw-semibold mb-1 theme-yellow-text">
+                                {shortenAddress(data.misc_data.realm_address)}{" "}
+                                
+                              </h2>
+                            </div>
+                            <div className="col-4">
+                              <div className="d-flex justify-content-end">
+                                <div
+                                  className="theme-yellow-text theme-border-white rounded-circle p-6 d-flex align-items-center justify-content-center"
+                                  style={{ border: "2px solid #FBB901" }}
+                                >
+                                  <i className="ti ti-ticket fs-6"></i>
                                 </div>
-                                <div class="timeline-desc fs-3 text-light mt-n1">
-                                  <span className="theme-yellow-text">
-                                    {txn.buyer}
-                                  </span>{" "}
-                                  bought a total of{" "}
-                                  <span className="theme-yellow-text">
-                                    {txn.tickets_bought}
-                                  </span>{" "}
-                                  Tickets
-                                </div>
-                              </li>
-                            ))}
-                          </>
-                        )}
-                      </ul>
-                    </div>
-                  </motion.div>
-                </div>
-                <div class="col-lg-8 d-flex align-items-stretch">
-                  <motion.div
-                    class="card w-100"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{
-                      duration: 0.1,
-                      delay: 0.9,
-                      y: {
-                        type: "spring",
-                        damping: 5,
-                        stiffness: 50,
-                        restDelta: 0.001,
-                      },
-                    }}
-                  >
-                    <div class="card-body p-4">
-                      <h5 class="card-title fw-semibold mb-4">Top Buyers</h5>
-                      <div class="table-responsive">
-                        <table class="table text-nowrap mb-0 align-middle">
-                          <thead class="text-light fs-4">
-                            <tr>
-                              <th class="border-bottom-0">
-                                <h6 class="fw-semibold mb-0">No.</h6>
-                              </th>
-                              <th class="border-bottom-0">
-                                <h6 class="fw-semibold mb-0 text-center">
-                                  Buyer
-                                </h6>
-                              </th>
-                              <th class="border-bottom-0">
-                                <h6 class="fw-semibold mb-0 text-center">
-                                  Each Ticket
-                                </h6>
-                              </th>
-                              <th class="border-bottom-0">
-                                <h6 class="fw-semibold mb-0 text-center">
-                                  Total Price
-                                </h6>
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {data.agg_buyers.buyers.length > 0 && (
-                              <>
-                                {data.agg_buyers.buyers.map((buyer, index) => (
-                                  <tr>
-                                    <td class="border-bottom-0">
-                                      <h6 class="fw-semibold mb-0">{index}</h6>
-                                    </td>
-                                    <td class="border-bottom-0">
-                                      <h6 class="fw-semibold mb-1 text-center">
-                                        {shortenAddress(buyer.buyer)}
-                                      </h6>
-                                      {/* <span class="fw-normal">Project Manager</span>                           */}
-                                    </td>
-                                    <td class="border-bottom-0">
-                                      <h6 class="fw-semibold mb-0 fs-4 text-center">
-                                        {buyer.tickets_bought}
-                                      </h6>
-                                    </td>
-                                    <td class="border-bottom-0 text-center">
-                                      <div class="text-center">
-                                        <span class="badge theme-red-bg rounded-3 fw-semibold">
-                                          {buyer.tickets_bought *
-                                            data.agg_data.each_ticket_price}
-                                        </span>
-                                      </div>
-                                    </td>
-                                  </tr>
-                                ))}
-                              </>
-                            )}
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </motion.div>
-                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <h5 className="card-title mb-0 fw-semibold">
+                            Realm Address
+                          </h5>
+                        </div>
+                      </motion.div>
+                  </div>
               </div>
             </div>
           )}
