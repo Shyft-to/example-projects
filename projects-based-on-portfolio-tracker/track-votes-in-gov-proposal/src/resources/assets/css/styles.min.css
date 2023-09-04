@@ -16581,6 +16581,11 @@ ul {
     color: var(--bs-our-theme-secondary);
 }
 
+.theme-green-text {
+    color: #00a86b !important;
+    border-color: #10bd9d !important;
+}
+
 .border-theme-red {
     --bs-border-opacity: 1;
     border-color: var(--bs-our-theme-primary) !important;

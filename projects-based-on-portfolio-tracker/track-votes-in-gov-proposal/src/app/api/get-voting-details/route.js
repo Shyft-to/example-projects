@@ -84,7 +84,7 @@ async function getProposalTransactions(address, network) {
         
         if(eachTransaction.type === "CREATE_PROPOSAL" && proposalName === "") {
             const nameAction = eachTransaction.actions.filter((action) => action.type === "CREATE_PROPOSAL");
-            console.log("name Action",nameAction);
+            // console.log("name Action",nameAction);
             proposalName = nameAction[0].info.proposal_name;
         }
         if(eachTransaction.type === "CAST_VOTE") {
@@ -104,7 +104,7 @@ async function getProposalTransactions(address, network) {
   } catch (error) {
     console.log(error.message);
     return {
-      success: true,
+      success: false,
       proposal_name: "",
       transactions: ""
     }
@@ -116,17 +116,15 @@ function getVotes(transactions) {
     var approved = 0;
     var disapproved = 0;
     var totalVotes = 0;
-    console.log("Transactions for this function: ", transactions);
     if(transactions.length < 1)
       throw new Error("NOT_ENOUGH_TXNS")
 
     for (let index = 0; index < transactions.length; index++) {
       const eachTransaction = transactions[index];
-      console.log("Checking Transaction: ", index);
+      // console.log("Checking Transaction: ", index);
       const voteAction = eachTransaction.actions.filter((action) => action.type === "CAST_VOTE");
       //alternatively, you can also view the first action in the actions array
       // const voteAction = eachTransaction.actions[0];
-      console.log(voteAction[0].info?.vote_type);
       if(voteAction[0].info?.vote_type === "Approve")
         approved++;
       else

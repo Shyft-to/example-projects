@@ -39,6 +39,7 @@ export default function Home() {
       type: 'pie',
     },
     labels: ['Yes', 'No'],
+    colors:['#00a86b', '#ff2400',],
     responsive: [{
       breakpoint: 480,
       options: {
@@ -179,7 +180,7 @@ export default function Home() {
                         </div>
                         <div className="col-4">
                           {data.votes_data.motion_passed?<div className="d-flex justify-content-end">
-                            <div className="theme-yellow-text border border-2 border-light rounded rounded-5 py-1 px-3 d-flex align-items-center justify-content-center w-50 text-bold">
+                            <div className="theme-green-text border border-2 border-light rounded rounded-5 py-1 px-3 d-flex align-items-center justify-content-center w-50 text-bold">
                               Motion Passed
                             </div>
                           </div>:

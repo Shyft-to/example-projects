@@ -22,7 +22,7 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 
 This project calculates the number of tickets sold for a FFF raffle in one day using SHYFT APIs. In order to run to run this project create an .env.local file, and add one variable called
 
-`API_KEY=`
+`SHYFT_KEY=`
 
 The value for this will be your SHYFT API key which you shall obtain from SHYFT Website [Here.](http://shyft.to/get-api-key)
 
